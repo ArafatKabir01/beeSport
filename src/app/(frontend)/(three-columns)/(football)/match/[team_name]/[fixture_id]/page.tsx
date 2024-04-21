@@ -1,5 +1,5 @@
 import { metaObject } from "@/config/site.config";
-import MatchDetails from "../../../components/MatchDetails";
+import MatchDetails from "../../components/MatchDetails";
 
 export const metadata = {
   ...metaObject("Match Details")

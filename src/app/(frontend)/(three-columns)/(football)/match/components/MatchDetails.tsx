@@ -3,8 +3,10 @@
 import Countdown from "@/app/(frontend)/components/Countdown";
 import FixtureCard from "@/app/(frontend)/components/FixtureCard";
 import VideoPlayer from "@/app/(frontend)/components/VideoPlayer";
-import { useGetLiveMatchQuery } from "@/features/front-end/fixture/fixtureApi";
+import { useGetFixtureDataQuery, useGetFixtureDatabyIdQuery } from "@/features/front-end/fixture/fixtureApi";
+
 import { RootState } from "@/features/store";
+import { useGetLiveMatchQuery } from "@/features/super-admin/live-match/liveMatchApi";
 import { IFixtureProps } from "@/types";
 import Link from "next/link";
 import { useSelector } from "react-redux";
@@ -20,7 +22,16 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
     return new Date() >= fifteenMinutesBeforeMatch;
   };
   const liveMatchStatus = isWithin15MinutesBeforeMatch(liveMatch?.data?.match_time);
+  const { isLoading, data: fixtureData } = useGetFixtureDataQuery(undefined);
 
+  const { isLoading: fixtureLoading, data: fixtureDataById } = useGetFixtureDatabyIdQuery(fixtureId);
+
+  if (isLoading || fixtureLoading) {
+    return <h2>Loading...</h2>;
+  }
+  console.log("fixtureDataById", fixtureDataById);
+
+  const hotFixture = fixtureData.data.filter((data: any) => data.matchType === "hot");
   return (
     <div className='mx-auto mb-20 md:mb-4'>
       <div className='flex flex-col items-start justify-between '>
@@ -105,26 +116,41 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
       >
         <div className='grid grid-cols-12 justify-items-center items-center my-3 '>
           <div className='col-span-4 flex flex-col items-center justify-center'>
-            <img src='/images/team_placeholder.png' alt='team-image' className='w-24 h-24' />
-            <h2 className='font-bold text-lg'>Team 1</h2>
+            <img
+              src={
+                fixtureDataById?.data?.participants[0]?.image
+                  ? fixtureDataById?.data?.participants[0]?.image
+                  : "/images/team_placeholder.png"
+              }
+              alt='team-image'
+              className='w-24 h-24'
+            />
+            <h2 className='font-bold text-lg'>{fixtureDataById?.data?.participants[0]?.name}</h2>
           </div>
           <div className='col-span-4 text-4xl font-bold'>
-            <p>0 - 0</p>
+            <p className=''>
+              {fixtureDataById?.data?.participants[0]?.score ? fixtureDataById?.data?.participants[0]?.score : 0} -{" "}
+              {fixtureDataById?.data?.participants[1]?.score ? fixtureDataById?.data?.participants[1]?.score : 0}
+            </p>
           </div>
           <div className='col-span-4 flex flex-col items-center justify-center'>
-            <img src='/images/team_placeholder.png' alt='team-image' className='w-24 h-24' />
-            <h2 className='font-bold text-lg'>Team 1</h2>
+            <img
+              src={
+                fixtureDataById?.data?.participants[1]?.image
+                  ? fixtureDataById?.data?.participants[1]?.image
+                  : "/images/team_placeholder.png"
+              }
+              alt='team-image'
+              className='w-24 h-24'
+            />
+            <h2 className='font-bold text-lg'>{fixtureDataById?.data?.participants[1]?.name}</h2>
           </div>
         </div>
       </div>
       <div className='visible m-2 mb-20 pb-2 md:mb-16 lg:m-0 lg:mb-0 '>
         <div className='bg-white p-3 rounded-lg '>
           <h2 className='text-xl font-bold my-5'>Hot Matches</h2>
-          <FixtureCard />
-          <FixtureCard />
-          <FixtureCard />
-          <FixtureCard />
-          <FixtureCard />
+          <FixtureCard fixtureData={hotFixture} />
         </div>
       </div>
     </div>
