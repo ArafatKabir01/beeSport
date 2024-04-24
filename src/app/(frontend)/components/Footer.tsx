@@ -1,16 +1,13 @@
 "use client";
 
-import { useGetSettingInfoQuery } from "@/features/front-end/settings/settingsApi";
-import { RootState } from "@/features/store";
 import moment from "moment";
 import { FaRegCopyright } from "react-icons/fa";
-import { useSelector } from "react-redux";
+
 import { MobileNavbar } from "./MobileNavbar";
 
 export default function Footer() {
-  const { lang } = useSelector((state: RootState) => state.langSlice);
   const updateYear = moment().format("YYYY [escaped] YYYY").split(" ");
-  const { data: settingInfo, isLoading: settingInfoLoading } = useGetSettingInfoQuery(undefined);
+  // const { data: settingInfo, isLoading: settingInfoLoading } = useGetSettingInfoQuery(undefined);
 
   return (
     <div className='bg-[#1F2937]'>

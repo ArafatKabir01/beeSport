@@ -1,3 +1,4 @@
+import getShortName from "@/utils/get-short-name";
 import Link from "next/link";
 import { Button } from "rizzui";
 
@@ -33,9 +34,9 @@ export default function FixtureCard({ fixtureData }: any) {
               <h2 className='text-xs lg:text-sm text-gray-400'>{fixture?.league?.name}</h2>
             </div>
           </div>
-          <div className='grid grid-cols-12 lg:grid-cols-5 w-full justify-items-center lg:justify-items-center text-md font-bold col-span-12 lg:col-span-5 items-center my-2 lg:my-0 '>
-            <div className='flex justify-end items-center col-span-5 lg:col-span-2 w-full '>
-              <h2 className='text-sm lg:text-md'>{fixture?.participants[0]?.name}</h2>
+          <div className='grid grid-cols-12 lg:grid-cols-5 w-full justify-items-center lg:justify-items-center text-md font-normal lg:font-bold col-span-12 lg:col-span-5 items-center my-2 lg:my-0 '>
+            <div className='flex justify-end items-center  col-span-5 lg:col-span-2 w-full '>
+              <h2 className='text-sm '>{getShortName(fixture?.participants[0]?.name)}</h2>
               <img
                 src={fixture?.participants[0]?.image ? fixture?.participants[0]?.image : "/images/team_placeholder.png"}
                 alt='team-image'
@@ -56,7 +57,7 @@ export default function FixtureCard({ fixtureData }: any) {
                 alt='team-image'
                 className='w-7 h-7 lg:h-8 lg:w-8 mx-1'
               />
-              <h2 className='col-span-2 text-sm lg:text-md'>{fixture?.participants[1]?.name}</h2>
+              <h2 className='text-sm '>{getShortName(fixture?.participants[1]?.name)}</h2>
             </div>
           </div>
           <div className='justify-self-end col-span-3 hidden lg:block'>

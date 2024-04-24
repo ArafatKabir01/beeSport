@@ -1,14 +1,13 @@
 import { routes } from "@/config/routes";
 import { useResendOtpMutation, useVerifyPhoneMutation } from "@/features/auth/authApi";
 import { userLoggedIn } from "@/features/auth/authSlice";
-import { RootState } from "@/features/store";
 import { TModalElementType } from "@/types";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { PiSpinnerLight } from "react-icons/pi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { PinCode } from "rizzui";
 
 export default function OtpModal({ phone }: { phone: string }) {
@@ -19,7 +18,6 @@ export default function OtpModal({ phone }: { phone: string }) {
   const [resendOtpSubmitting, setResendOtpSubmitting] = useState(false);
   const [otpValidMsg, setOtpValidMsg] = useState("");
 
-  const { lang } = useSelector((state: RootState) => state.langSlice);
   const [verifyPhone, { data: responseData, isSuccess, isError }] = useVerifyPhoneMutation();
 
   const [resendOtp, { data: resendResponse, isSuccess: resendSuccess, isError: resendError }] = useResendOtpMutation();
@@ -64,7 +62,7 @@ export default function OtpModal({ phone }: { phone: string }) {
         });
       }
     }
-  }, [dispatch, isError, isSuccess, lang, replace, responseData]);
+  }, [dispatch, isError, isSuccess, replace, responseData]);
 
   // Handle Resend Response
   useEffect(() => {

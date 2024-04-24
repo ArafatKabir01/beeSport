@@ -1,20 +1,19 @@
 "use client";
 
 import { useGetTopLeaguesQuery } from "@/features/front-end/league/leagueApi";
-import { RootState } from "@/features/store";
+import { useGetTeamInfoQuery } from "@/features/front-end/teams/teamsApi";
 import { ILeague } from "@/types";
-import { useSelector } from "react-redux";
+import Link from "next/link";
 import LeagueItem from "./LeagueItem";
 
-export default function TopLeaguesList() {
-  const { sportType } = useSelector((state: RootState) => state.fixtureSlice);
-  const category = sportType;
-
-  const { data: popularLeagues, isLoading, isError } = useGetTopLeaguesQuery(category, { skip: !category });
+export default function TopLeaguesList({ data }: { data: string }) {
+  const { data: popularLeagues, isLoading, isError } = useGetTopLeaguesQuery(undefined);
+  const { data: teams, isLoading: teamsLoading } = useGetTeamInfoQuery(undefined);
+  console.log("teams", teams);
 
   const arr = [1, 2, 3, 4, 5, 6, 7];
 
-  if (isLoading) {
+  if (isLoading || teamsLoading) {
     return (
       <div className='mb-2 space-y-4'>
         {arr.map((shimmer) => (
@@ -26,6 +25,7 @@ export default function TopLeaguesList() {
       </div>
     );
   }
+
   if (!popularLeagues?.data?.docs?.length) {
     return (
       <div className='border-t border-gray-300 pb-2'>
@@ -38,8 +38,29 @@ export default function TopLeaguesList() {
 
   if (popularLeagues.status) {
     return (
-      <div className=''>
-        {popularLeagues?.data?.docs?.map((league: ILeague) => <LeagueItem key={league?.id} league={league} />)}
+      <div>
+        {data === "league" ? (
+          <div className=''>
+            {popularLeagues?.data?.docs?.map((league: ILeague) => (
+              <Link key={league?.id} href={`/leagues/${league?.name}/${league?.id}`}>
+                <LeagueItem league={league} />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className=''>
+            {teams?.data?.map((team: any) => (
+              <Link key={team?.teamId} href={`/teams/${team?.name}/${team?.teamId}`}>
+                <div className='select-none'>
+                  <div className='mb-3 flex items-center'>
+                    <img src={team?.image} alt={team?.name} className='h-9 w-9 rounded-full' />
+                    <p className='text-md font-semibold ms-3'>{team?.name}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     );
   }

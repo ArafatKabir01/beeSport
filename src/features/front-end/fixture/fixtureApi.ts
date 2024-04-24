@@ -7,8 +7,15 @@ export const fixtureApi = apiSlice.injectEndpoints({
     }),
     getFixtureDatabyId: builder.query({
       query: (id) => `/api/fixtures/${id}`
+    }),
+    getFixtureLiveId: builder.query({
+      query: (id) => `/api/live-matches/${id}`
+    }),
+    getFixtureLive: builder.query({
+      query: (id) => `/api/live-matches`
     })
   })
 });
 
-export const { useGetFixtureDataQuery, useGetFixtureDatabyIdQuery } = fixtureApi;
+export const { useGetFixtureDataQuery, useGetFixtureDatabyIdQuery, useGetFixtureLiveIdQuery, useGetFixtureLiveQuery } =
+  fixtureApi;

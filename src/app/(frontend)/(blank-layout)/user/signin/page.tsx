@@ -9,12 +9,12 @@ export const metadata = {
   ...metaObject("User Sign In")
 };
 
-export default async function Page({ params: { lang } }: { params: { lang: Locale } }) {
+export default async function Page() {
   const session = await getServerSession(authOptions);
 
   if (session?.user) {
     redirect("/");
   }
 
-  return <SignInForm signUp={false} lang={lang} />;
+  return <SignInForm signUp={false} />;
 }

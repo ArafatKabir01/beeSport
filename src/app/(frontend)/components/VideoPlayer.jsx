@@ -3,6 +3,7 @@
 import JWPlayer from "@jwplayer/jwplayer-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { Button } from "rizzui";
 
 const formatDate = (timestamp) => new Date(timestamp * 1000);
 const isWithin15MinutesBeforeMatch = (timestamp) => {
@@ -50,9 +51,19 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
                 playlist={[{ sources: [{ file: videoUrls[currentStreamIndex] }] }]}
                 autostart={true}
                 logo={null}
-                controls={true}
+                controls={false}
               />
             )}
+            <div className='flex justify-center items-center w-[900px] h-[500px] bg-black absolute top-[40px] left-[4rem] bottom-0 z-50 bg-opacity-90'>
+              <div className=' text-center w-[500px]'>
+                <h2 className='text-3xl font-bold text-[#EE1E46] mb-5'>YOUR TRIAL HAS EXPIRED!</h2>
+                <p className='text-white mb-3'>
+                  Upgrade your account now to continue enjoying exclusive sports content and never miss a moment of the
+                  action!
+                </p>
+                <Button className='text-white bg-[#EE1E46]'>Update Your Plan</Button>
+              </div>
+            </div>
           </div>
 
           <div className='mb-5 mt-5 flex flex-col items-start justify-between px-1 lg:px-4'>

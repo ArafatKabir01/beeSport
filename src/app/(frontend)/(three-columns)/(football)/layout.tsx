@@ -3,13 +3,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import SkewCard from "../../components/SkewCard";
 import TopLeaguesList from "../../components/TopLeaguesList";
-export default async function ThreeColumnsLayout({
-  children,
-  params: { lang }
-}: {
-  children: React.ReactNode;
-  params: { lang: Locale };
-}) {
+export default async function ThreeColumnsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className='flex min-h-screen flex-col bg-[#F3F4F6] '>
       <Header />
@@ -18,14 +12,10 @@ export default async function ThreeColumnsLayout({
           <div className='grid grid-cols-12 gap-4'>
             <div className='col-span-3 hidden w-full lg:col-span-3 lg:block'>
               <SkewCard title='Leagues'>
-                <TopLeaguesList />
-                <TopLeaguesList />
-                <TopLeaguesList />
+                <TopLeaguesList data={"league"} />
               </SkewCard>
               <SkewCard title='Teams'>
-                <TopLeaguesList />
-                <TopLeaguesList />
-                <TopLeaguesList />
+                <TopLeaguesList data={"team"} />
               </SkewCard>
             </div>
 

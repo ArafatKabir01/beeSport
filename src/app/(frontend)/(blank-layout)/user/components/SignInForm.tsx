@@ -6,7 +6,7 @@ import { userLoggedIn } from "@/features/auth/authSlice";
 import { useGetAllowedStatesQuery } from "@/features/front-end/settings/settingsApi";
 
 import { TModalElementType } from "@/types";
-import { CountryCode, isValidPhoneNumber } from "libphonenumber-js";
+import { isValidPhoneNumber } from "libphonenumber-js";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,11 +15,10 @@ import toast from "react-hot-toast";
 import { HiOutlineArrowSmLeft } from "react-icons/hi";
 import { PiSpinnerLight } from "react-icons/pi";
 import { useDispatch } from "react-redux";
-import { Password } from "rizzui";
+import { Input, Password } from "rizzui";
 import OtpModal from "./OtpModal";
-import { PhoneNumber } from "./PhoneNumber";
 
-export default function SignInForm({ signUp, lang }: { signUp: boolean; lang: Locale }) {
+export default function SignInForm({ signUp }: { signUp: boolean }) {
   const { replace } = useRouter();
   const dispatch = useDispatch();
   const [phone, setPhone] = useState("");
@@ -97,7 +96,7 @@ export default function SignInForm({ signUp, lang }: { signUp: boolean; lang: Lo
         toast.error(loginResponse?.message);
       }
     }
-  }, [loginError, loginSuccess, loginResponse, replace, dispatch, lang]);
+  }, [loginError, loginSuccess, loginResponse, replace, dispatch]);
 
   // Submit Handler
   const signInHandler = (e: React.FormEvent) => {
@@ -145,8 +144,8 @@ export default function SignInForm({ signUp, lang }: { signUp: boolean; lang: Lo
   };
 
   return (
-    <section className='flex min-h-screen items-center justify-center bg-[#061626]  '>
-      <div className='card w-[350px] lg:w-[500px] bg-[#1C2632] shadow-xl'>
+    <section className='flex min-h-screen items-center justify-center bg-[#F3F4F6]  '>
+      <div className='card w-[350px] lg:w-[500px] bg-white shadow-xl'>
         <div className='card-body'>
           <h2 className='mb-5 text-center text-xl font-semibold'>{signUp ? "Sign Up" : "Sign In"}</h2>
           <form onSubmit={signInHandler}>
@@ -156,34 +155,37 @@ export default function SignInForm({ signUp, lang }: { signUp: boolean; lang: Lo
                 <div className='h-12 w-full animate-pulse rounded bg-[#061626]'></div>
               </div>
             ) : (
+              // <div>
+              //   <PhoneNumber
+              //     label='Phone Number'
+              //     size='lg'
+              //     country={allowedCountries?.data[0] ? allowedCountries?.data[0] : ""}
+              //     onlyCountries={allowedCountries?.data ? allowedCountries?.data : ""}
+              //     dropdownClassName='text-black'
+              //     requiredStar={true}
+              //     labelClassName='text-base'
+              //     color='primary'
+              //     variant='outline'
+              //     onChange={(
+              //       phone,
+              //       country: {
+              //         name: string;
+              //         countryCode: CountryCode;
+              //         dialCode: string;
+              //       }
+              //     ) => {
+              //       setPhoneValidMsg("");
+              //       setPhone(phone);
+              //       setCountry(country?.name);
+              //       setCountryCode(country?.countryCode.toUpperCase());
+              //       setDialCode(country?.dialCode);
+              //     }}
+              //     value={phone}
+              //   />
+              //   {phoneValidMsg && <p className='mt-1 select-none px-1 font-medium text-error'>{phoneValidMsg}</p>}
+              // </div>
               <div>
-                <PhoneNumber
-                  label='Phone Number'
-                  size='lg'
-                  country={allowedCountries?.data[0] ? allowedCountries?.data[0] : ""}
-                  onlyCountries={allowedCountries?.data ? allowedCountries?.data : ""}
-                  dropdownClassName='text-black'
-                  requiredStar={true}
-                  labelClassName='text-base'
-                  color='primary'
-                  variant='outline'
-                  onChange={(
-                    phone,
-                    country: {
-                      name: string;
-                      countryCode: CountryCode;
-                      dialCode: string;
-                    }
-                  ) => {
-                    setPhoneValidMsg("");
-                    setPhone(phone);
-                    setCountry(country?.name);
-                    setCountryCode(country?.countryCode.toUpperCase());
-                    setDialCode(country?.dialCode);
-                  }}
-                  value={phone}
-                />
-                {phoneValidMsg && <p className='mt-1 select-none px-1 font-medium text-error'>{phoneValidMsg}</p>}
+                <Input type='email' label='Email' placeholder='Enter your email' />
               </div>
             )}
 
@@ -197,6 +199,7 @@ export default function SignInForm({ signUp, lang }: { signUp: boolean; lang: Lo
                 }
                 variant='outline'
                 color='primary'
+                placeholder='Enter your password'
                 labelClassName='text-base'
                 onChange={(e) => {
                   setPasswordValidMsg("");

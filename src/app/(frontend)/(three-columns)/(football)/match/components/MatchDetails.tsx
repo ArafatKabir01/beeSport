@@ -3,18 +3,24 @@
 import Countdown from "@/app/(frontend)/components/Countdown";
 import FixtureCard from "@/app/(frontend)/components/FixtureCard";
 import VideoPlayer from "@/app/(frontend)/components/VideoPlayer";
-import { useGetFixtureDataQuery, useGetFixtureDatabyIdQuery } from "@/features/front-end/fixture/fixtureApi";
+import {
+  useGetFixtureDataQuery,
+  useGetFixtureDatabyIdQuery,
+  useGetFixtureLiveIdQuery
+} from "@/features/front-end/fixture/fixtureApi";
 
 import { RootState } from "@/features/store";
-import { useGetLiveMatchQuery } from "@/features/super-admin/live-match/liveMatchApi";
+
 import { IFixtureProps } from "@/types";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
 export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtureProps) {
   const { accessToken } = useSelector((state: RootState) => state.authSlice);
-  const { data: liveMatch, isLoading: streamSourcesLoading } = useGetLiveMatchQuery(fixtureId) as any;
+  const { data: liveMatch, isLoading: streamSourcesLoading } = useGetFixtureLiveIdQuery(fixtureId) as any;
+
   const streamSources = liveMatch?.data?.streaming_sources;
+  console.log("liveMatch", liveMatch);
   const formatDate = (timestamp: any) => new Date(timestamp * 1000);
   const isWithin15MinutesBeforeMatch = (timestamp: any) => {
     const fifteenMinutesBeforeMatch = new Date(formatDate(timestamp));
@@ -29,20 +35,19 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
   if (isLoading || fixtureLoading) {
     return <h2>Loading...</h2>;
   }
-  console.log("fixtureDataById", fixtureDataById);
 
-  const hotFixture = fixtureData.data.filter((data: any) => data.matchType === "hot");
+  const hotFixture = fixtureData?.data?.filter((data: any) => data.matchType === "hot");
   return (
     <div className='mx-auto mb-20 md:mb-4'>
       <div className='flex flex-col items-start justify-between '>
         <div className='w-full bg-[#1B2435] '></div>
       </div>
 
-      {!liveMatch?.status && (
+      {liveMatch?.status && (
         <div>
-          {!accessToken ? (
+          {accessToken ? (
             <div>
-              {!liveMatchStatus ? (
+              {liveMatchStatus ? (
                 <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
               ) : (
                 <div className='my-5 flex justify-center'>

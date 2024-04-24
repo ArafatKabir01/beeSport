@@ -30,7 +30,7 @@ const LiveTvHome = () => {
           root_stream_stream_key: "dx"
         }
       ],
-      stream_url: "http://walterebert.com/playground/video/hls/sintel-trailer.m3u8",
+      stream_url: "https://d1gnaphp93fop2.cloudfront.net/videos/multiresolution/rendition_new10.m3u8",
       headers: '{"Origin":"","Referer":""}',
       position: 99999999,
       __v: 0
@@ -38,7 +38,7 @@ const LiveTvHome = () => {
   ];
   return (
     <div>
-      <VideoPlayer streamSources={streamSources} fixtureId={44798361} />
+      <VideoPlayer streamSources={streamSources} fixtureId={"512683554479689"} />
       <div className='my-8 flex flex-wrap gap-4'>
         {arr.map((a) => (
           <div
