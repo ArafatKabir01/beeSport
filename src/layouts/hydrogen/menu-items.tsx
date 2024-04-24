@@ -13,25 +13,15 @@ export const menuItems = [
     href: routes.admin.dashboard,
     icon: <LuLayoutDashboard />
   },
-  {
-    name: "Manage Live",
-    href: routes.admin.manageLive.home,
-    icon: <BiVideoRecording />
-  },
+  // {
+  //   name: "Manage Live",
+  //   href: routes.admin.manageLive.home,
+  //   icon: <BiVideoRecording />
+  // },
   {
     name: "Fixtures",
-    href: "#",
+    href: routes.admin.fixture,
     icon: <IoCalendarOutline />,
-    dropdownItems: [
-      {
-        name: "Football",
-        href: routes.admin.fixture.football
-      },
-      {
-        name: "Cricket",
-        href: routes.admin.fixture.cricket
-      }
-    ]
   },
   {
     name: "News",
@@ -39,13 +29,23 @@ export const menuItems = [
     icon: <IoNewspaperOutline />
   },
   {
+    name: "Manage Match",
+    href: routes.admin.manageMatch.home,
+    icon: <PiTelevisionFill />
+  },
+  {
     name: "Highlights",
     href: routes.admin.highlights.home,
     icon: <PiTelevisionFill />
   },
   {
-    name: "Popular Leagues",
+    name: "Leagues",
     href: routes.admin.popularLeagues,
+    icon: <IoShieldHalfSharp />
+  },
+  {
+    name: "Teams",
+    href: routes.admin.teams,
     icon: <IoShieldHalfSharp />
   },
   {
@@ -53,16 +53,16 @@ export const menuItems = [
     href: routes.admin.manageUser,
     icon: <LuUsers />
   },
-  {
-    name: "ADS",
-    href: routes.admin.ads.home,
-    icon: <SiGoogleads />
-  },
-  {
-    name: "Tip Star",
-    href: routes.admin.tipStar.home,
-    icon: <MdOutlineTipsAndUpdates />
-  },
+  // {
+  //   name: "ADS",
+  //   href: routes.admin.ads.home,
+  //   icon: <SiGoogleads />
+  // },
+  // {
+  //   name: "Tip Star",
+  //   href: routes.admin.tipStar.home,
+  //   icon: <MdOutlineTipsAndUpdates />
+  // },
   {
     name: "General Settings",
     href: routes.admin.generalSettings,

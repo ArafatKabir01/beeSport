@@ -23,10 +23,13 @@ export const routes = {
       edit: (id: number | string) => `/super-admin/manage-live-matches/update/${id}`,
       clone: (id: number | string) => `/super-admin/manage-live-matches/clone/${id}`
     },
-    fixture: {
-      football: "/super-admin/fixtures/football",
-      cricket: "/super-admin/fixtures/cricket"
+    manageMatch: {
+      home: "/super-admin/manage-matches",
+      create: "/super-admin/manage-matches/create",
+      edit: (id: number | string) => `/super-admin/manage-matches/update/${id}`,
+      clone: (id: number | string) => `/super-admin/manage-matches/clone/${id}`
     },
+    fixture: "/super-admin/fixtures",
     news: {
       home: `/super-admin/news`,
       league: "/super-admin/news/league",
@@ -52,6 +55,12 @@ export const routes = {
       create: "/super-admin/highlights/create",
       edit: (id: number | string) => `/super-admin/highlights/update/${id}`
     },
-    popularLeagues: "/super-admin/popular-leagues"
+    ownFixtures: {
+      home: "/super-admin/own-fixtures",
+      create: "/super-admin/own-fixtures/create",
+      edit: (id: number | string) => `/super-admin/own-fixtures/update/${id}`
+    },
+    popularLeagues: "/super-admin/leagues",
+    teams: "/super-admin/teams"
   }
 };

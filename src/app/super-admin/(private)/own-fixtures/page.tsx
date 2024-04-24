@@ -4,18 +4,18 @@ import { metaObject } from "@/config/site.config";
 import HighlightIndex from "./components/HighlightIndex";
 
 export const metadata = {
-  ...metaObject("Admin Highlights")
+  ...metaObject("Admin Own Fixtures")
 };
 
 const pageHeader = {
-  title: "Highlights",
+  title: "Own Fixtures",
   breadcrumb: [
     {
       href: routes.admin.dashboard,
       name: "Dashboard"
     },
     {
-      name: "Highlights"
+      name: "Own Fixtures"
     }
   ]
 };
@@ -26,8 +26,8 @@ export default function Page() {
       <PageHeader
         title={pageHeader.title}
         breadcrumb={pageHeader.breadcrumb}
-        isLinkBtn={false}
-        isLinkBtnText='Add New Highlight'
+        isLinkBtn
+        isLinkBtnText='Add New Fixture'
         href={routes.admin.highlights.create}
       ></PageHeader>
       <HighlightIndex />

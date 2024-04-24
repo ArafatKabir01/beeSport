@@ -25,7 +25,7 @@ export default function NewsCreateFom({
   setNewsImage: any;
   newsImage: any;
 }) {
-  const { data: cricketLeagues, isLoading: cricketLeaguesLoading } = useGetPopularLeaguesQuery("cricket");
+  
   const { data: footballLeagues, isLoading: footballLeaguesLoading } = useGetPopularLeaguesQuery("football");
 
   const handleChange = (input: string) => {
@@ -46,7 +46,7 @@ export default function NewsCreateFom({
           <Field className='input input-bordered w-full bg-white' name='title' />
         </label>
       </div>
-      <div className='col-span-6'>
+      {/* <div className='col-span-6'>
         <label className='form-control w-full'>
           <div className='label'>
             <span className='label-text font-medium'>
@@ -59,7 +59,7 @@ export default function NewsCreateFom({
             <option value='cricket'>Cricket</option>
           </Field>
         </label>
-      </div>
+      </div> */}
       <div className='col-span-6'>
         <label className='form-control w-full'>
           <div className='label'>
@@ -68,27 +68,19 @@ export default function NewsCreateFom({
               <ErrorMessage name='league' component='span' className='text-sm text-red-600' />
             </span>
           </div>
-          {!footballLeaguesLoading && !cricketLeaguesLoading && (
+          {!footballLeaguesLoading && (
             <Field as='select' className='input input-bordered w-full bg-white' name='league'>
               <option value=''>Select One</option>
 
-              {values.category === "football" &&
+              {
                 footballLeagues?.data?.docs?.map((league: any) => {
                   return (
                     <option key={league.id} value={league.name}>
                       {league.name}
                     </option>
                   );
-                })}
-
-              {values.category === "cricket" &&
-                cricketLeagues?.data?.docs?.map((league: any) => {
-                  return (
-                    <option key={league.id} value={league.name}>
-                      {league.name}
-                    </option>
-                  );
-                })}
+                })
+                }
             </Field>
           )}
         </label>

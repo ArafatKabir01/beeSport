@@ -3,7 +3,7 @@
 import ImageDropzoneSingle from "@/components/image-dropzone-single";
 import { routes } from "@/config/routes";
 import { useCreateHighlightMutation } from "@/features/super-admin/highlight/highlightApi";
-import { useGetPopularLeaguesQuery } from "@/features/super-admin/popular-football-entity/popularFootballEntityApi";
+import { useCreateFixtureMutation } from "@/features/super-admin/fixture/fixtureApi";
 import "flatpickr/dist/flatpickr.css";
 import "flatpickr/dist/themes/dark.css";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
@@ -22,47 +22,64 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
   const [uploadImageMsg, setUploadImageMsg] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [createHighlight, { isError, isSuccess }] = useCreateHighlightMutation();
-  // const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
+  const [createFixture] = useCreateFixtureMutation();
 
   const initialValues = {
     title: searchParams?.match_title || "",
-    date: searchParams?.time.slice(0, 10) || "",
+    // category: searchParams?.category || "football",
+    // date: searchParams?.time.slice(0, 10) || "",
     fixtureId: searchParams?.fixture_id || "",
-    videoType: "",
-    youtubeUrl: "",
-    sources: [""],
-    thumbnailImageType: "",
-    thumbnailImage: "",
+    fixtureType: "",
+    // youtubeUrl: "",
+    // sources: [""],
+    // thumbnailImageType: "",
+    // thumbnailImage: "",
     status: "1"
   };
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Required!"),
-    date: Yup.string().required("Required!"),
+    // category: Yup.string().required("Required!"),
+    // date: Yup.string().required("Required!"),
     fixtureId: Yup.string().required("Required!"),
-    videoType: Yup.string().required("Required!"),
-    thumbnailImageType: Yup.string().required("Required!")
+    fixtureType: Yup.string().required("Required!"),
+    // thumbnailImageType: Yup.string().required("Required!")
   });
 
   // Submit Handler
-  const handleSubmit = (values: any) => {
+  const handleSubmit = async(values: any) => {
     setIsSubmitting(true);
-    let formBody = new FormData();
+   
+    
+    const res : any = await createFixture({
+      fixtures : [
+        {id : values?.fixtureId, matchType : values?.fixtureType}
+      ]
+    });
 
-    formBody.append("title", values?.title);
-    formBody.append("date", values?.date);
-    formBody.append("fixtureId", values?.fixtureId);
-    formBody.append("videoType", values?.videoType);
-    formBody.append("youtubeUrl", values?.youtubeUrl);
-    formBody.append("sources", JSON.stringify(values?.sources));
-    formBody.append("status", values?.status);
-    formBody.append("thumbnailImageType", values?.thumbnailImageType);
+    if(res?.data?.status){
+      toast.success(res?.data?.message);
+      router.push("/super-admin/own-fixtures");
+    }else{
+      toast.error('Something went wrong!');
+    }
+    // let formBody = new FormData();
 
-    thumbnailImage
-      ? formBody.append("thumbnailImage", thumbnailImage)
-      : formBody.append("thumbnailImageUrl", values?.thumbnailImage);
+    // formBody.append("title", values?.title);
+    // formBody.append("date", values?.date);
+    // formBody.append("fixtureId", values?.fixtureId);
+    // formBody.append("videoType", values?.videoType);
+    // formBody.append("youtubeUrl", values?.youtubeUrl);
+    // formBody.append("sources", JSON.stringify(values?.sources));
+    // formBody.append("status", values?.status);
+    // formBody.append("category", values?.category);
+    // formBody.append("thumbnailImageType", values?.thumbnailImageType);
 
-    createHighlight(formBody);
+    // thumbnailImage
+    //   ? formBody.append("thumbnailImage", thumbnailImage)
+    //   : formBody.append("thumbnailImageUrl", values?.thumbnailImage);
+
+    // createHighlight(formBody);
   };
 
   useEffect(() => {
@@ -102,7 +119,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                   </label>
                 )}
               </Field>
-
+{/* 
               <Field name='date'>
                 {({ field, meta }: { field: any; meta: any }) => (
                   <Flatpickr
@@ -136,7 +153,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                     }}
                   />
                 )}
-              </Field>
+              </Field> */}
 
               <Field name='fixtureId'>
                 {({ field, meta }: { field: any; meta: any }) => (
@@ -176,33 +193,30 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                   </label>
                 )}
               </Field>
-              
               {/* <Field name='category'>
                 {({ field, meta }: { field: any; meta: any }) => (
                   <label className='form-control'>
                     <div className='label'>
                       <span className='label-text font-semibold'>
-                        League{" "}
+                        Category{" "}
                         <span className='text-red-600'>
                           * {meta.touched && meta.error && <span>({meta.error})</span>}
                         </span>
                       </span>
                     </div>
                     <select className='select select-bordered' {...field}>
-                    {
-                    footballLeagues?.data?.docs?.map((item : any) => <option key={item?.id} value={item?.name}>{item?.name}</option>)
-                    }
+                      <option value='football'>Football</option>
+                      <option value='cricket'>Cricket</option>
                     </select>
                   </label>
                 )}
               </Field> */}
-
-              <Field name='videoType'>
+              <Field name='fixtureType'>
                 {({ field, meta }: { field: any; meta: any }) => (
-                  <label className='form-control col-span-2'>
+                  <label className='form-control'>
                     <div className='label'>
                       <span className='label-text font-semibold'>
-                        Video Type{" "}
+                        Fixture Type{" "}
                         <span className='text-red-600'>
                           * {meta.touched && meta.error && <span>({meta.error})</span>}
                         </span>
@@ -213,14 +227,14 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                       {...field}
                     >
                       <option value=''>Select One</option>
-                      <option value='source'>Source</option>
-                      <option value='youtube'>Youtube</option>
+                      <option value='hot'>Hot</option>
+                      <option value='normal'>Normal</option>
                     </select>
                   </label>
                 )}
               </Field>
 
-              {values.videoType === "youtube" && (
+              {/* {values.videoType === "youtube" && (
                 <Field name='youtubeUrl'>
                   {({ field, meta }: { field: any; meta: any }) => (
                     <label className='form-control col-span-2'>
@@ -396,7 +410,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                     sizeText='1MB'
                   />
                 </div>
-              )}
+              )} */}
             </div>
             <div className='my-8 flex justify-end'>
               <button type='submit' className='btn btn-primary btn-sm rounded-md  ' disabled={isSubmitting}>

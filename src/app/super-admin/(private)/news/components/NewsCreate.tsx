@@ -26,7 +26,7 @@ export default function NewsCreate() {
     if (newsSuccess) {
       setIsSubmitting(false);
       refetch();
-      toast.success("Live match created successfully!");
+      toast.success("News created successfully!");
       router.push(routes.admin.news.home);
     }
   }, [newsError, newsSuccess, refetch, router]);
@@ -34,7 +34,6 @@ export default function NewsCreate() {
   const initialValues = {
     title: "",
     league: "",
-    category: "football",
     shortDescription: "",
     description: "",
     imageType: "url",
@@ -46,7 +45,6 @@ export default function NewsCreate() {
   const newsSchema = Yup.object().shape({
     title: Yup.string().required("Required!"),
     league: Yup.string().required("Required!"),
-    category: Yup.string().required("Required!"),
     description: Yup.string().required("Required!"),
     shortDescription: Yup.string().required("Required!"),
     imageType: Yup.string().required("Required!"),
@@ -65,7 +63,6 @@ export default function NewsCreate() {
 
     formBody.append("title", values?.title);
     formBody.append("league", values?.league);
-    formBody.append("category", values?.category);
     formBody.append("shortDescription", values.shortDescription);
     formBody.append("description", values.description);
     formBody.append("imageType", values.imageType);

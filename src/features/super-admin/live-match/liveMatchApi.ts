@@ -13,7 +13,7 @@ export const liveMatchApi = apiSlice.injectEndpoints({
     createLiveMatch: builder.mutation<{}, FormData>({
       query: (data) => {
         return {
-          url: "/api/admin/matches/create",
+          url: "/api/v2/admin/fixtures",
           method: "POST",
           body: data
           // credentials: 'include',
@@ -24,7 +24,7 @@ export const liveMatchApi = apiSlice.injectEndpoints({
     updateLiveMatch: builder.mutation({
       query: ({ id, data }) => {
         return {
-          url: `/api/admin/matches/${id}`,
+          url: `/api/v2/admin/fixtures/${id}`,
           method: "PUT",
           body: data
         };

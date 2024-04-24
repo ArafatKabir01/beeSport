@@ -26,6 +26,8 @@ export const apiSlice = createApi({
     "highlights",
     "highlight",
     "allBanners",
-    "tipster"
+    "tipster",
+    "fixtures",
+    "teams"
   ]
 });

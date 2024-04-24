@@ -2,67 +2,98 @@
 
 import ImageDropzoneSingle from "@/components/image-dropzone-single";
 import { routes } from "@/config/routes";
-import { useCreateHighlightMutation } from "@/features/super-admin/highlight/highlightApi";
-import { useGetPopularLeaguesQuery } from "@/features/super-admin/popular-football-entity/popularFootballEntityApi";
+import { useGetHighlightQuery, useUpdateHighlightMutation } from "@/features/super-admin/highlight/highlightApi";
+import { useGetFixtureByIdQuery, useUpdateFixtureMutation } from "@/features/super-admin/fixture/fixtureApi";
 import "flatpickr/dist/flatpickr.css";
 import "flatpickr/dist/themes/dark.css";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
+import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
 import toast from "react-hot-toast";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import { FaTrashAlt } from "react-icons/fa";
 import { FiCheckCircle } from "react-icons/fi";
 import { PiSpinnerLight } from "react-icons/pi";
 import * as Yup from "yup";
 
-export default function HighlightCreate({ searchParams }: { searchParams: any }) {
+export default function HighlightUpdate({ highlightId }: { highlightId: number }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadImageMsg, setUploadImageMsg] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
-  const [createHighlight, { isError, isSuccess }] = useCreateHighlightMutation();
-  // const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
-
-  const initialValues = {
-    title: searchParams?.match_title || "",
-    date: searchParams?.time.slice(0, 10) || "",
-    fixtureId: searchParams?.fixture_id || "",
-    videoType: "",
-    youtubeUrl: "",
-    sources: [""],
-    thumbnailImageType: "",
-    thumbnailImage: "",
+  const [updateHighlight, { isError, isSuccess }] = useUpdateHighlightMutation();
+  const [updateFixture] = useUpdateFixtureMutation();
+  const {data : fixture, isSuccess : isFixtureSuccess} = useGetFixtureByIdQuery(highlightId);
+  const { isLoading, data } = useGetHighlightQuery(highlightId);
+  const [initialValues, setInitialValues] = useState({
+    title: "",
+    // category: "",
+    // date: "",
+    fixtureId: "",
+    fixtureType: "",
+    // youtubeUrl: "",
+    // sources: [""],
+    // thumbnailImageType: "",
+    // thumbnailImage: "",
     status: "1"
-  };
+  });
+
+  console.log("fixtu", fixture);
+
+  useEffect(() => {
+    if (isFixtureSuccess) {
+      // const highlightData = data?.data;
+      setInitialValues((prev) => {
+        return {
+          ...prev,
+          title : fixture?.data?.name,
+          fixtureId : fixture?.data?.fixtureId,
+          fixtureType: fixture?.data?.matchType,
+          status: fixture?.data?.status
+          // ...highlightData,
+          // date: highlightData?.date ? moment(highlightData?.date).format("YYYY-MM-DD") : ""
+        };
+      });
+    }
+  }, [fixture, isFixtureSuccess]);
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Required!"),
-    date: Yup.string().required("Required!"),
+    // category: Yup.string().required("Required!"),
+    // date: Yup.string().required("Required!"),
     fixtureId: Yup.string().required("Required!"),
-    videoType: Yup.string().required("Required!"),
-    thumbnailImageType: Yup.string().required("Required!")
+    fixtureType: Yup.string().required("Required!"),
+    // thumbnailImageType: Yup.string().required("Required!")
   });
 
-  // Submit Handler
-  const handleSubmit = (values: any) => {
+  const handleSubmit = async(values: any) => {
     setIsSubmitting(true);
-    let formBody = new FormData();
+    // let formBody = new FormData();
 
-    formBody.append("title", values?.title);
-    formBody.append("date", values?.date);
-    formBody.append("fixtureId", values?.fixtureId);
-    formBody.append("videoType", values?.videoType);
-    formBody.append("youtubeUrl", values?.youtubeUrl);
-    formBody.append("sources", JSON.stringify(values?.sources));
-    formBody.append("status", values?.status);
-    formBody.append("thumbnailImageType", values?.thumbnailImageType);
+    // formBody.append("title", values?.title);
+    // formBody.append("category", values?.category);
+    // formBody.append("date", values?.date);
+    // formBody.append("fixtureId", values?.fixtureId);
+    // formBody.append("videoType", values?.videoType);
+    // formBody.append("youtubeUrl", values?.youtubeUrl);
+    // formBody.append("sources", JSON.stringify(values?.sources));
+    // formBody.append("status", values?.status);
+    // formBody.append("thumbnailImageType", values?.thumbnailImageType);
 
-    thumbnailImage
-      ? formBody.append("thumbnailImage", thumbnailImage)
-      : formBody.append("thumbnailImageUrl", values?.thumbnailImage);
+    // thumbnailImage
+    //   ? formBody.append("thumbnailImage", thumbnailImage)
+    //   : formBody.append("thumbnailImageUrl", values?.thumbnailImage);
 
-    createHighlight(formBody);
+    // updateHighlight({ id: highlightId, data: formBody });
+    const res : any = await updateFixture({id : highlightId, data : {name : values?.title, status : values?.status, matchType : values?.fixtureType}})
+    if(res?.data?.status){
+      toast.success(res?.data?.message);
+      router.push("/super-admin/own-fixtures");
+    }else{
+      toast.error('Something went wrong!');
+    }
   };
 
   useEffect(() => {
@@ -72,13 +103,18 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
     }
 
     if (isSuccess) {
-      toast.success("Highlight created successfully!");
-      router.push(routes.admin.highlights.home);
+      toast.success("Highlight updated successfully!");
+      router.replace(routes.admin.highlights.home);
     }
   }, [isError, isSuccess, router]);
 
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      enableReinitialize
+    >
       {({ values, setFieldValue, handleChange }) => {
         return (
           <Form>
@@ -103,7 +139,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                 )}
               </Field>
 
-              <Field name='date'>
+              {/* <Field name='date'>
                 {({ field, meta }: { field: any; meta: any }) => (
                   <Flatpickr
                     value={values?.date}
@@ -136,7 +172,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                     }}
                   />
                 )}
-              </Field>
+              </Field> */}
 
               <Field name='fixtureId'>
                 {({ field, meta }: { field: any; meta: any }) => (
@@ -176,33 +212,32 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                   </label>
                 )}
               </Field>
-              
+
               {/* <Field name='category'>
                 {({ field, meta }: { field: any; meta: any }) => (
                   <label className='form-control'>
                     <div className='label'>
                       <span className='label-text font-semibold'>
-                        League{" "}
+                        Category{" "}
                         <span className='text-red-600'>
                           * {meta.touched && meta.error && <span>({meta.error})</span>}
                         </span>
                       </span>
                     </div>
                     <select className='select select-bordered' {...field}>
-                    {
-                    footballLeagues?.data?.docs?.map((item : any) => <option key={item?.id} value={item?.name}>{item?.name}</option>)
-                    }
+                      <option value='football'>Football</option>
+                      <option value='cricket'>Cricket</option>
                     </select>
                   </label>
                 )}
               </Field> */}
 
-              <Field name='videoType'>
+              <Field name='fixtureType'>
                 {({ field, meta }: { field: any; meta: any }) => (
                   <label className='form-control col-span-2'>
                     <div className='label'>
                       <span className='label-text font-semibold'>
-                        Video Type{" "}
+                        Fixture Type{" "}
                         <span className='text-red-600'>
                           * {meta.touched && meta.error && <span>({meta.error})</span>}
                         </span>
@@ -213,14 +248,14 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                       {...field}
                     >
                       <option value=''>Select One</option>
-                      <option value='source'>Source</option>
-                      <option value='youtube'>Youtube</option>
+                      <option value='hot'>Hot</option>
+                      <option value='normal'>Normal</option>
                     </select>
                   </label>
                 )}
               </Field>
 
-              {values.videoType === "youtube" && (
+              {/* {values.videoType === "youtube" && (
                 <Field name='youtubeUrl'>
                   {({ field, meta }: { field: any; meta: any }) => (
                     <label className='form-control col-span-2'>
@@ -233,40 +268,11 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                         </span>
                       </div>
                       <input
+                        value={values.youtubeUrl}
                         placeholder='https://'
                         type='url'
                         className='input input-bordered w-full'
                         name='youtubeUrl'
-                        onChange={(e) => {
-                          handleChange(e);
-                          const url = e.target.value;
-                          const videoId = url.split("v=")[1];
-                          setFieldValue("thumbnailImageType", "url");
-                          setFieldValue("thumbnailImage", `https://img.youtube.com/vi/${videoId}/0.jpg`);
-                        }}
-                      />
-                    </label>
-                  )}
-                </Field>
-              )}
-
-              {values.videoType === "youtubeUrl" && (
-                <Field name='youtubeUrl'>
-                  {({ field, meta }: { field: any; meta: any }) => (
-                    <label className='form-control col-span-2'>
-                      <div className='label'>
-                        <span className='label-text font-semibold'>
-                          Youtube Url{" "}
-                          <span className='text-red-600'>
-                            * {meta.touched && meta.error && <span>({meta.error})</span>}
-                          </span>
-                        </span>
-                      </div>
-                      <input
-                        placeholder='https://'
-                        type='url'
-                        className='input input-bordered w-full'
-                        name='youtube_url'
                         onChange={(e) => {
                           handleChange(e);
                           const url = e.target.value;
@@ -366,6 +372,23 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                 </Field>
               )}
 
+              {values?.thumbnailImageType === "image" && values.thumbnailImage && (
+                <div className='mt-2 flex items-center gap-3'>
+                  <img
+                    src={values.thumbnailImage}
+                    alt='Uploaded Image'
+                    className='h-24 w-24 rounded-md border border-gray-200 object-contain p-1'
+                  />
+                  <button
+                    type='button'
+                    className='rounded bg-red-500 p-1'
+                    onClick={() => setFieldValue("thumbnailImage", "")}
+                  >
+                    <FaTrashAlt className='hover:fill-secondary-400 h-5 w-5 fill-white transition-colors' />
+                  </button>
+                </div>
+              )}
+
               {values?.thumbnailImageType === "url" && values.thumbnailImage && (
                 <div className='mt-2'>
                   <img
@@ -376,7 +399,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                 </div>
               )}
 
-              {values.thumbnailImageType === "image" && (
+              {values.thumbnailImageType === "image" && values.thumbnailImage === "" && (
                 <div className='col-span-2'>
                   <div className='label'>
                     <span className='label-text font-medium'>
@@ -396,7 +419,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
                     sizeText='1MB'
                   />
                 </div>
-              )}
+              )} */}
             </div>
             <div className='my-8 flex justify-end'>
               <button type='submit' className='btn btn-primary btn-sm rounded-md  ' disabled={isSubmitting}>

@@ -26,7 +26,6 @@ export default function HighlightUpdate({ highlightId }: { highlightId: number }
   const { isLoading, data } = useGetHighlightQuery(highlightId);
   const [initialValues, setInitialValues] = useState({
     title: "",
-    category: "",
     date: "",
     fixtureId: "",
     videoType: "",
@@ -52,7 +51,6 @@ export default function HighlightUpdate({ highlightId }: { highlightId: number }
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Required!"),
-    category: Yup.string().required("Required!"),
     date: Yup.string().required("Required!"),
     fixtureId: Yup.string().required("Required!"),
     videoType: Yup.string().required("Required!"),
@@ -64,7 +62,6 @@ export default function HighlightUpdate({ highlightId }: { highlightId: number }
     let formBody = new FormData();
 
     formBody.append("title", values?.title);
-    formBody.append("category", values?.category);
     formBody.append("date", values?.date);
     formBody.append("fixtureId", values?.fixtureId);
     formBody.append("videoType", values?.videoType);
@@ -197,7 +194,7 @@ export default function HighlightUpdate({ highlightId }: { highlightId: number }
                 )}
               </Field>
 
-              <Field name='category'>
+              {/* <Field name='category'>
                 {({ field, meta }: { field: any; meta: any }) => (
                   <label className='form-control'>
                     <div className='label'>
@@ -214,7 +211,7 @@ export default function HighlightUpdate({ highlightId }: { highlightId: number }
                     </select>
                   </label>
                 )}
-              </Field>
+              </Field> */}
 
               <Field name='videoType'>
                 {({ field, meta }: { field: any; meta: any }) => (

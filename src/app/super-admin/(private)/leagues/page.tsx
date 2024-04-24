@@ -3,7 +3,7 @@ import { routes } from "@/config/routes";
 import { metaObject } from "@/config/site.config";
 import LeagueContainer from "./components/LeagueContainer";
 
-const title = "Popular Leagues";
+const title = "Leagues";
 
 const pageHeader = {
   title,

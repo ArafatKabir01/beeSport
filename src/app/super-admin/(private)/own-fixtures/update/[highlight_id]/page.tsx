@@ -1,33 +1,34 @@
 import PageHeader from "@/app/shared/page-header";
 import { routes } from "@/config/routes";
 import { metaObject } from "@/config/site.config";
-import FootballFixtureContainer from "../components/FootballFixtureContainer";
+import HighlightUpdate from "../../components/HighlightUpdate";
+
+export const metadata = {
+  ...metaObject("Admin Highlights")
+};
 
 const pageHeader = {
-  title: "Football Fixtures",
+  title: "Fixtures",
   breadcrumb: [
     {
       href: routes.admin.dashboard,
       name: "Dashboard"
     },
     {
+      href: routes.admin.highlights.home,
       name: "Fixtures"
     },
     {
-      name: "Football"
+      name: "Edit"
     }
   ]
 };
 
-export const metadata = {
-  ...metaObject("Fixtures - Football")
-};
-
-export default function Page() {
+export default function Page({ params: { highlight_id } }: { params: { highlight_id: number } }) {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} isLinkBtn={false}></PageHeader>
-      <FootballFixtureContainer />
+      <HighlightUpdate highlightId={highlight_id} />
     </>
   );
 }

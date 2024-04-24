@@ -288,6 +288,7 @@ export interface IFixtureSearchParams {
   t2_img: string;
   time: string;
   sports_type: string;
+  state : string;
 }
 
 export interface IFootballFixtureGroup {

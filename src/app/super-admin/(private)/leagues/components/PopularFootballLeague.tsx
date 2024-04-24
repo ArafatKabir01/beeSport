@@ -16,6 +16,7 @@ export default function PopularFootballLeague() {
 
   const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
 
+
   const [deleteFootballLeague, { isSuccess: deleteLeagueSuccess, isError: deleteLeagueError }] =
     useDeletePopularLeagueMutation();
 

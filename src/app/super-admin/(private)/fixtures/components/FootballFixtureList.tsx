@@ -3,6 +3,7 @@
 import { routes } from "@/config/routes";
 import { useGetFootballFixturesQuery } from "@/features/super-admin/fixture/fixtureApi";
 import { useGetGeneralSettingsQuery } from "@/features/super-admin/general-settings/generalSettingsApi";
+import { useGetPopularLeaguesQuery } from "@/features/super-admin/popular-football-entity/popularFootballEntityApi";
 import { IFootballFixtureGroup } from "@/types";
 import { getCurrentGoals } from "@/utils/get-current-goals";
 import moment from "moment";
@@ -18,6 +19,8 @@ export default function FootballFixtureList({ pickerDate }: { pickerDate: string
   const [showFixtureData, setShowFixtureData] = useState<boolean>(false);
   const [offset, setOffset] = useState<number>(0);
 
+  const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
+
   const {
     data: fixtures,
     isLoading: fixturesLoading,
@@ -26,6 +29,13 @@ export default function FootballFixtureList({ pickerDate }: { pickerDate: string
   } = useGetFootballFixturesQuery(pickerDate, {
     skip
   });
+
+
+  const selectedFixtures = footballLeagues?.data?.docs?.map((league : any) => {
+    return fixtures?.data?.find((fixture : any) => fixture?.id === league?.id)
+  })?.filter((item : any) => item !== undefined);
+ 
+  console.log("selected leagues", selectedFixtures);
 
   const { data: generalSettings, isLoading, isError } = useGetGeneralSettingsQuery(undefined);
 
@@ -66,7 +76,7 @@ export default function FootballFixtureList({ pickerDate }: { pickerDate: string
 
       {!isFetching &&
         showFixtureData &&
-        fixtures.data.map((group: IFootballFixtureGroup) => {
+        selectedFixtures?.map((group: IFootballFixtureGroup) => {
           return (
             <div key={group?.id}>
               <div className='panel'>
@@ -146,7 +156,7 @@ export default function FootballFixtureList({ pickerDate }: { pickerDate: string
                             </div>
                           </td>
                           <td>
-                            {isFinished ? (
+                            {/* {isFinished ? (
                               <Link
                                 href={`${routes.admin.highlights.create}?fixture_id=${fixture?.id}&match_title=${fixture
                                   ?.league?.name}&time=${moment
@@ -172,7 +182,24 @@ export default function FootballFixtureList({ pickerDate }: { pickerDate: string
                                   <HiPlus className='text-base mr-1' /> Add Live
                                 </Button>
                               </Link>
-                            )}
+                            )} */}
+                            <Link
+                                // href={`${routes.admin.ownFixtures.create}?fixture_id=${fixture?.id}&match_title=${fixture?.name}&time=${moment
+                                //   .utc(fixture?.starting_at)
+                                //   .utcOffset(offset)
+                                //   .format("YYYY-MM-DD HH:mm")}&category=football`}
+                                href={`${routes.admin.manageMatch.create}?fixture_id=${fixture?.id}&match_title=${fixture
+                                  ?.league?.name}&t1_name=${fixture?.participants[0]?.name}&t1_img=${fixture
+                                  ?.participants[0]?.image_path}&t2_name=${fixture?.participants[1]
+                                  ?.name}&t2_img=${fixture?.participants[1]?.image_path}&time=${moment
+                                  .utc(fixture?.starting_at)
+                                  .utcOffset(offset)
+                                  .format("YYYY-MM-DD HH:mm")}&state=${fixture?.state?.state}`}
+                              >
+                                <Button size='sm' variant='outline'>
+                                  <HiPlus className='text-base mr-1' /> Add Fixture
+                                </Button>
+                              </Link>
                           </td>
                         </tr>
                       );

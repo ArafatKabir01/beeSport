@@ -22,7 +22,6 @@ export default function NewsUpdate({ newsId }: { newsId: number }) {
   const [initialValues, setInitialValues] = useState({
     title: "",
     league: "",
-    category: "football",
     shortDescription: "",
     description: "",
     imageType: "url",
@@ -52,7 +51,7 @@ export default function NewsUpdate({ newsId }: { newsId: number }) {
     if (newsSuccess) {
       setIsSubmitting(false);
       refetch();
-      toast.success("Live match updated successfully!");
+      toast.success("News updated successfully!");
       router.push(routes.admin.news.home);
     }
   }, [newsError, newsSuccess, refetch, router]);
@@ -60,7 +59,6 @@ export default function NewsUpdate({ newsId }: { newsId: number }) {
   const newsSchema = Yup.object().shape({
     title: Yup.string().required("Required!"),
     league: Yup.string().required("Required!"),
-    category: Yup.string().required("Required!"),
     description: Yup.string().required("Required!"),
     shortDescription: Yup.string().required("Required!"),
     imageType: Yup.string().required("Required!"),
@@ -79,7 +77,6 @@ export default function NewsUpdate({ newsId }: { newsId: number }) {
 
     formBody.append("title", values?.title);
     formBody.append("league", values?.league);
-    formBody.append("category", values?.category);
     formBody.append("shortDescription", values.shortDescription);
     formBody.append("description", values.description);
     formBody.append("imageType", values.imageType);
