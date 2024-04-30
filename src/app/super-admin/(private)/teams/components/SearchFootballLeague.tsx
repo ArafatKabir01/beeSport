@@ -27,7 +27,6 @@ export default function SearchFootballLeague({
   const { data, isFetching } = useLeagueSearchQuery(debounceText, { skip });
   const {data : searchTeams} = useTeamSearchQuery(debounceText, { skip });
 
-  console.log("searchTeams", searchTeams);
 
   const {
     data: footballLeagues,

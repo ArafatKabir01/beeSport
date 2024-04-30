@@ -18,7 +18,6 @@ export default function MatchInfoForm({
     props: any;
   };
   const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
-  console.log("fjjf", footballLeagues?.data?.docs)
   return (
     <FormBlockWrapper title="Match Information">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

@@ -9,7 +9,6 @@ import LeagueItem from "./LeagueItem";
 export default function TopLeaguesList({ data }: { data: string }) {
   const { data: popularLeagues, isLoading, isError } = useGetTopLeaguesQuery(undefined);
   const { data: teams, isLoading: teamsLoading } = useGetTeamInfoQuery(undefined);
-  console.log("teams", teams);
 
   const arr = [1, 2, 3, 4, 5, 6, 7];
 

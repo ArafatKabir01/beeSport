@@ -19,12 +19,16 @@ export default function FootballFixtures() {
         <div className='visible m-2 mb-20 pb-2 md:mb-16 lg:m-0 lg:mb-0 '>
           <div className='bg-white p-1 lg:p-3 rounded-lg '>
             <h2 className='text-xl font-bold my-5'>Hot Matches</h2>
-            {hotFixture?.length ? <FixtureCard fixtureData={hotFixture} /> : <NoDataFound />}
+            {hotFixture?.length ? (
+              hotFixture.map((fixture: any) => <FixtureCard key={fixture?.id} fixture={fixture} />)
+            ) : (
+              <NoDataFound />
+            )}
           </div>
           <div className='bg-white p-1 lg:p-3 rounded-lg mt-8'>
             <h2 className='text-xl font-bold my-5'>All Matches</h2>
             <div className=''>
-              <FixtureCard fixtureData={fixtureData?.data} />
+              {fixtureData?.data?.map((fixture: any) => <FixtureCard key={fixture?.id} fixture={fixture} />)}
             </div>
           </div>
         </div>

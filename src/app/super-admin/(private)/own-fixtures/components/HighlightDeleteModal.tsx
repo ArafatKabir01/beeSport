@@ -30,7 +30,6 @@ export default function HighlightDeleteModal({
     deleteFixture(id);
   };
 
-  console.log("delete data", data);
 
   useEffect(() => {
     if (isSuccess && data?.status && !isError) {

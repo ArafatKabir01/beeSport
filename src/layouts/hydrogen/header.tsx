@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 flex items-center bg-gray-0/80 px-4 py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 lg:px-6 2xl:py-5 3xl:px-8 4xl:px-10",
+        "sticky top-0 z-50 flex items-center bg-gray-0/80 px-4 py-2 backdrop-blur-xl dark:bg-gray-50/50 shadow",
         ((isMounted && windowScroll.y) as number) > 2 ? "card-shadow" : ""
       )}
     >

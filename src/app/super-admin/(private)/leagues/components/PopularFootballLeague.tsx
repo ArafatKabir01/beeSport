@@ -16,7 +16,6 @@ export default function PopularFootballLeague() {
 
   const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
 
-
   const [deleteFootballLeague, { isSuccess: deleteLeagueSuccess, isError: deleteLeagueError }] =
     useDeletePopularLeagueMutation();
 
@@ -92,7 +91,7 @@ export default function PopularFootballLeague() {
                     <div className='col-span-6 flex justify-end'>
                       <Popover enableOverlay placement='left-start'>
                         <Popover.Trigger>
-                          <Button variant='outline' color='danger'>
+                          <Button variant='text' color='danger'>
                             <ImBin className='text-xl text-error cursor-pointer' />
                           </Button>
                         </Popover.Trigger>
