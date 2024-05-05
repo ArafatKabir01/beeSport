@@ -13,7 +13,7 @@ export default function MatchInfoForm({ values, setFieldValue }: { values: any; 
   };
   const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
   return (
-    <FormBlockWrapper title='Match Information'>
+    <FormBlockWrapper title='Match Information' className='border border-gray-300 rounded-lg p-4'>
       <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
         <Field name='match_title'>
           {({ field, meta }: { field: any; meta: any }) => (

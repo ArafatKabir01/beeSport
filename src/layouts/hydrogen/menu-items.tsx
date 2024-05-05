@@ -1,11 +1,8 @@
 import { routes } from "@/config/routes";
-import { BiVideoRecording } from "react-icons/bi";
 import { FaCogs } from "react-icons/fa";
 import { IoCalendarOutline, IoNewspaperOutline, IoShieldHalfSharp } from "react-icons/io5";
 import { LuLayoutDashboard, LuUsers } from "react-icons/lu";
-import { MdOutlineTipsAndUpdates } from "react-icons/md";
 import { PiTelevisionFill } from "react-icons/pi";
-import { SiGoogleads } from "react-icons/si";
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
   {
@@ -21,21 +18,12 @@ export const menuItems = [
   {
     name: "Fixtures",
     href: routes.admin.fixture,
-    icon: <IoCalendarOutline />,
+    icon: <IoCalendarOutline />
   },
-  {
-    name: "News",
-    href: routes.admin.news.home,
-    icon: <IoNewspaperOutline />
-  },
+
   {
     name: "Manage Match",
     href: routes.admin.manageMatch.home,
-    icon: <PiTelevisionFill />
-  },
-  {
-    name: "Highlights",
-    href: routes.admin.highlights.home,
     icon: <PiTelevisionFill />
   },
   {
@@ -47,6 +35,16 @@ export const menuItems = [
     name: "Teams",
     href: routes.admin.teams,
     icon: <IoShieldHalfSharp />
+  },
+  {
+    name: "News",
+    href: routes.admin.news.home,
+    icon: <IoNewspaperOutline />
+  },
+  {
+    name: "Highlights",
+    href: routes.admin.highlights.home,
+    icon: <PiTelevisionFill />
   },
   {
     name: "Manage Users",

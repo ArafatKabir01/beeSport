@@ -5,7 +5,7 @@ import FormBlockWrapper from "../../components/FormBlockWrapper";
 
 export default function StreamingInfoForm({ values }: { values: any }) {
   return (
-    <FormBlockWrapper title='Streaming Sources Information'>
+    <FormBlockWrapper title='Streaming Sources Information' className='border border-gray-300 rounded-lg p-4'>
       <FieldArray name='streaming_sources'>
         {(arrayHelpers) => (
           <div>

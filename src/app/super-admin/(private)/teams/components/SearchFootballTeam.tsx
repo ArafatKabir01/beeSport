@@ -1,9 +1,8 @@
 import {
-  useAddPopularLeagueMutation,
   useGetPopularLeaguesQuery,
   useLeagueSearchQuery
 } from "@/features/super-admin/popular-league/popularLeagueApi";
-import { useTeamSearchQuery, useAddTeamMutation } from "@/features/super-admin/teams/teamApi";
+import { useAddTeamMutation, useTeamSearchQuery } from "@/features/super-admin/teams/teamApi";
 import useDebounce from "@/hooks/use-debounce";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -14,7 +13,7 @@ import { PiListMagnifyingGlassLight } from "react-icons/pi";
 import { RxCross2 } from "react-icons/rx";
 import { ActionIcon, Input, Loader, Modal, Title } from "rizzui";
 
-export default function SearchFootballLeague({
+export default function SearchFootballTeam({
   isOpen,
   setIsOpen
 }: {
@@ -25,8 +24,7 @@ export default function SearchFootballLeague({
   const debounceText = useDebounce(searchText, 500);
   const [skip, setSkip] = useState(true);
   const { data, isFetching } = useLeagueSearchQuery(debounceText, { skip });
-  const {data : searchTeams} = useTeamSearchQuery(debounceText, { skip });
-
+  const { data: searchTeams } = useTeamSearchQuery(debounceText, { skip });
 
   const {
     data: footballLeagues,
@@ -34,10 +32,7 @@ export default function SearchFootballLeague({
     refetch: footballLeagueRefetch
   } = useGetPopularLeaguesQuery("football");
 
-  const [
-    addTeam,
-    { data: addTeamResponse, isSuccess: addTeamSuccess, isError: addTeamError }
-  ] = useAddTeamMutation();
+  const [addTeam, { data: addTeamResponse, isSuccess: addTeamSuccess, isError: addTeamError }] = useAddTeamMutation();
 
   useEffect(() => {
     if (debounceText.length >= 3) {
@@ -49,7 +44,7 @@ export default function SearchFootballLeague({
 
   useEffect(() => {
     if (addTeamError) {
-      toast.error("already have created team");
+      toast.error("Already have created team");
     }
 
     if (addTeamSuccess) {
@@ -67,12 +62,11 @@ export default function SearchFootballLeague({
 
   // Add Handler
   const handleLeagueData = (data: any) => {
-
     addTeam({
-      teamId : data?.id,
-      name : data?.name,
-      image : data?.image_path
-    })
+      teamId: data?.id,
+      name: data?.name,
+      image: data?.image_path
+    });
     // addFootballLeague({
     //   id: data?.id,
     //   name: data?.name,

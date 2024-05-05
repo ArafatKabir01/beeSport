@@ -75,9 +75,9 @@ export default function NewsCreate() {
 
   return (
     <div className='flex-grow pb-10'>
-      <div className='grid grid-cols-1 gap-8 @2xl:gap-10 @3xl:gap-12'>
+      <div className='grid grid-cols-1 gap-8 @2xl:gap-10 @3xl:gap-12 border border-gray-300 rounded-lg p-4'>
         <Formik initialValues={initialValues} validationSchema={newsSchema} enableReinitialize onSubmit={handleSubmit}>
-          {({ values, setFieldValue, errors }) => {
+          {({ values, setFieldValue }) => {
             return (
               <Form>
                 <NewsForm
