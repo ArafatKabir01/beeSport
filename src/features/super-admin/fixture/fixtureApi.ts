@@ -14,30 +14,27 @@ export const fixtureApi = apiSlice.injectEndpoints({
       query: (fixtureId) => `/api/admin/fixtures/highlights/${fixtureId}`,
       keepUnusedDataFor: 0
     }),
-    createFixture : builder.mutation({
-      query : (data) => {
+    createFixture: builder.mutation({
+      query: (data) => {
         return {
-          url : `/api/v2/admin/fixtures`,
-          method : 'POST',
-          body : data
-        }
+          url: `/api/v2/admin/fixtures`,
+          method: "POST",
+          body: data
+        };
       },
-      invalidatesTags : ["fixtures"]
+      invalidatesTags: ["fixtures"]
     }),
     getAllFixture: builder.query({
-      query: ({page, limit}) =>
-        `/api/v2/admin/fixtures?page=${page}&limit=${limit}`,
-      providesTags : ["fixtures"]
+      query: ({ page, limit }) => `/api/v2/admin/fixtures?page=${page}&limit=${limit}`,
+      providesTags: ["fixtures"]
     }),
     getAllOwnFixture: builder.query({
-      query: () =>
-        `/api/v2/admin/fixtures/own-fixtures`,
-      providesTags : ["fixtures"]
+      query: () => `/api/v2/admin/fixtures/own-fixtures`,
+      providesTags: ["fixtures"]
     }),
     getFixtureById: builder.query({
-      query: (fixtureId) =>
-        `/api/v2/admin/fixtures/${fixtureId}`,
-      providesTags : ["fixtures"]
+      query: (fixtureId) => `/api/v2/admin/fixtures/${fixtureId}`,
+      providesTags: ["fixtures"]
     }),
     updateFixture: builder.mutation({
       query: ({ id, data }) => {
@@ -47,27 +44,38 @@ export const fixtureApi = apiSlice.injectEndpoints({
           body: data
         };
       },
-      invalidatesTags : ["fixtures"]
+      invalidatesTags: ["fixtures"]
     }),
-    refreashFixture: builder.mutation({
+    refreshFixture: builder.mutation({
       query: (id) => {
         return {
-          url: `/api/v2/admin/fixtures/refreash/${id}`,
-          method: "PATCH",
+          url: `/api/v2/admin/fixtures/refresh/${id}`,
+          method: "PATCH"
         };
       },
-      invalidatesTags : ["fixtures"]
+      invalidatesTags: ["fixtures"]
     }),
     deleteFixture: builder.mutation({
       query: (id) => {
         return {
           url: `/api/v2/admin/fixtures/${id}`,
-          method: "DELETE",
+          method: "DELETE"
         };
       },
-      invalidatesTags : ["fixtures"]
-    }),
+      invalidatesTags: ["fixtures"]
+    })
   })
 });
 
-export const { useGetFootballFixturesQuery, useCheckHighlightsQuery, useGetCricketV2FixturesQuery, useCreateFixtureMutation, useGetAllFixtureQuery, useGetFixtureByIdQuery, useUpdateFixtureMutation, useDeleteFixtureMutation, useRefreashFixtureMutation, useGetAllOwnFixtureQuery} = fixtureApi;
+export const {
+  useGetFootballFixturesQuery,
+  useCheckHighlightsQuery,
+  useGetCricketV2FixturesQuery,
+  useCreateFixtureMutation,
+  useGetAllFixtureQuery,
+  useGetFixtureByIdQuery,
+  useUpdateFixtureMutation,
+  useDeleteFixtureMutation,
+  useRefreshFixtureMutation,
+  useGetAllOwnFixtureQuery
+} = fixtureApi;

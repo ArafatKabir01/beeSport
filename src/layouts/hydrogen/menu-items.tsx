@@ -2,7 +2,7 @@ import { routes } from "@/config/routes";
 import { FaCogs } from "react-icons/fa";
 import { IoCalendarOutline, IoNewspaperOutline, IoShieldHalfSharp } from "react-icons/io5";
 import { LuLayoutDashboard, LuUsers } from "react-icons/lu";
-import { PiTelevisionFill } from "react-icons/pi";
+import { PiMicrosoftTeamsLogoLight, PiTelevisionFill } from "react-icons/pi";
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
   {

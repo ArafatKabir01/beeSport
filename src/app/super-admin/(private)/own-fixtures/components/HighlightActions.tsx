@@ -5,8 +5,8 @@ import TrashIcon from "@/components/icons/trash";
 import { ActionIcon } from "@/components/ui/action-icon";
 import { Tooltip } from "@/components/ui/tooltip";
 import { routes } from "@/config/routes";
+import { useRefreshFixtureMutation } from "@/features/super-admin/fixture/fixtureApi";
 import Link from "next/link";
-import { useRefreashFixtureMutation } from "@/features/super-admin/fixture/fixtureApi";
 import toast from "react-hot-toast";
 import { LuRefreshCw } from "react-icons/lu";
 
@@ -23,8 +23,7 @@ export default function HighlightActions({
   setDeleteItem,
   setDeleteModalState
 }: LiveMatchActionsProps) {
-
-  const [refreashFixture, {isLoading}] = useRefreashFixtureMutation();
+  const [refreshFixture, { isLoading }] = useRefreshFixtureMutation();
 
   return (
     <div className='space-x-2'>
@@ -53,17 +52,20 @@ export default function HighlightActions({
           size='sm'
           variant='outline'
           aria-label={"Refresh status and score"}
-          onClick={async() => {
-            const res : any = await refreashFixture(id);
-            if(res?.data?.status){
-              toast.success(res?.data?.message)
+          onClick={async () => {
+            const res: any = await refreshFixture(id);
+            if (res?.data?.status) {
+              toast.success(res?.data?.message);
             }
-            
           }}
         >
-          {
-            isLoading ? <div className="animate-spin"><LuRefreshCw /></div> : <LuRefreshCw />
-          }
+          {isLoading ? (
+            <div className='animate-spin'>
+              <LuRefreshCw />
+            </div>
+          ) : (
+            <LuRefreshCw />
+          )}
         </ActionIcon>
       </Tooltip>
     </div>

@@ -5,12 +5,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 // import required modules
-import { usePathname } from "next/navigation";
+import { useGetBannersQuery } from "@/features/front-end/banner/bannerApi";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "./BannerSlider.css";
 
 function BannerSlider() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: bannerData, isLoading, isSuccess } = useGetBannersQuery({ page: 1, limit: 30 });
+
+  console.log("bannerData", bannerData?.data);
+
   return (
     <div>
       {pathname === "/" && (
@@ -29,7 +36,7 @@ function BannerSlider() {
             modules={[Autoplay, Pagination, Navigation]}
             className='mySwiper'
           >
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <img
                 src='https://img.lovepik.com/background/20211021/large/lovepik-cool-line-technology-banner-background-image_400112106.jpg'
                 alt='banner-img'
@@ -49,7 +56,19 @@ function BannerSlider() {
             <SwiperSlide>Slide 6</SwiperSlide>
             <SwiperSlide>Slide 7</SwiperSlide>
             <SwiperSlide>Slide 8</SwiperSlide>
-            <SwiperSlide>Slide 9</SwiperSlide>
+            <SwiperSlide>Slide 9</SwiperSlide> */}
+            {bannerData?.data?.map((item: any) => (
+              <SwiperSlide key={item?.id}>
+                <Link href={`/match/${item?.title?.split(" ")?.join("-")}/${item?.fixtureId}`}>
+                  <img
+                    // onClick={() => router.push(`/match/${item?.title?.split(" ")?.join("-")}/${item?.fixtureId}`)}
+                    src={item?.image}
+                    alt='banner-img'
+                    className='h-full object-cover cursor-pointer'
+                  />
+                </Link>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </>
       )}

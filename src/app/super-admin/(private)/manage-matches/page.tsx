@@ -26,7 +26,7 @@ export default function Page() {
       <PageHeader
         title={pageHeader.title}
         breadcrumb={pageHeader.breadcrumb}
-        isLinkBtn ={false}
+        isLinkBtn={false}
         isLinkBtnText='Add New Live Match'
         href={routes.admin.manageLive.create}
       ></PageHeader>
