@@ -9,9 +9,9 @@ import toast from "react-hot-toast";
 import { HiPlus } from "react-icons/hi";
 import { ImBin } from "react-icons/im";
 import { Button, Popover, Text, Title } from "rizzui";
-import SearchFootballLeague from "./SearchFootballLeague";
+import SearchTeam from "./SearchTeam";
 
-export default function PopularFootballLeague() {
+export default function PopularTeam() {
   const [leagueList, setLeagueList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -162,7 +162,7 @@ export default function PopularFootballLeague() {
         </div>
       </div>
 
-      <SearchFootballLeague isOpen={isOpen} setIsOpen={setIsOpen} />
+      <SearchTeam isOpen={isOpen} setIsOpen={setIsOpen} />
     </section>
   );
 }

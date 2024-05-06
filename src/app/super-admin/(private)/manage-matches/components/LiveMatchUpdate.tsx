@@ -32,6 +32,7 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
     fixture_id: "",
     match_title: "",
     time: "",
+    live_status : "0",
     is_hot: "0",
     status: "1",
     team_one_name: "",
@@ -54,6 +55,7 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
         time: matchData?.startingAt,
         is_hot: matchData?.matchType === 'normal' ? "0" : "1",
         sports_type_name: "",
+        live_status : matchData?.live_status ? "1" : "0",
         status: matchData?.status,
         team_one_name: matchData?.participants[0]?.name,
         team_two_name: matchData?.participants[1]?.name,
@@ -80,7 +82,7 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
       setIsSubmitting(false);
       toast.success("Live match updated successfully!");
       refetch();
-      router.push(routes.admin.manageLive.home);
+      router.push(routes.admin.manageMatch.home);
     }
   }, [isError, isLoading, isSuccess, liveMatch, refetch, response, router]);
 
@@ -91,6 +93,7 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
     fixture_id: Yup.string().nullable(),
     team_one_name: Yup.string().required("Required!"),
     team_two_name: Yup.string().required("Required!"),
+    live_status : Yup.string(),
     status: Yup.string(),
     team_one_image_type: Yup.string(),
     team_two_image_type: Yup.string(),
@@ -140,6 +143,7 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
     formBody.append("fixture_id", liveMatchData?.fixture_id);
     formBody.append("is_hot", liveMatchData?.is_hot);
     formBody.append("sports_type_name", liveMatchData?.sports_type_name);
+    formBody.append("live_status", liveMatchData?.live_status);
     formBody.append("status", liveMatchData?.status);
     formBody.append("team_one_name", liveMatchData?.team_one_name);
     formBody.append("team_two_name", liveMatchData?.team_two_name);
@@ -154,8 +158,6 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
     teamTwoImage
       ? formBody.append("team_two_image", teamTwoImage)
       : formBody.append("team_two_image_url", liveMatchData?.team_two_image);
-
-      console.log("ukpdated clicked")
 
     updateLiveMatch({ id: liveMatchId, data: formBody });
   };

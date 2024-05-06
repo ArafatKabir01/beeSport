@@ -29,7 +29,7 @@ export const liveMatchApi = apiSlice.injectEndpoints({
           body: data
         };
       },
-      invalidatesTags: (result, error, arg: any) => ["liveMatches", { type: "liveMatch", id: arg.id }]
+      invalidatesTags: (result, error, arg: any) => ["liveMatches", "fixtures", { type: "liveMatch", id: arg.id }]
     }),
     sortLiveMatch: builder.mutation({
       query: (data) => {

@@ -44,6 +44,7 @@ export default function LiveMatchCreate({ searchParams }: { searchParams: IFixtu
     match_title: searchParams?.match_title || "",
     time: searchParams?.time || "",
     is_hot: "0",
+    live_status : "0",
     sports_type_name: searchParams?.sports_type || "football",
     status: "1",
     team_one_name: searchParams?.t1_name || "",
@@ -100,8 +101,6 @@ export default function LiveMatchCreate({ searchParams }: { searchParams: IFixtu
           ? teamTwoImage
           : values?.team_two_image
     };
-
-    console.log("liveMatchData", liveMatchData);
 
     var formBody = new FormData();
 

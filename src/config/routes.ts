@@ -36,6 +36,12 @@ export const routes = {
       create: "/super-admin/news/create",
       edit: (id: number | string) => `/super-admin/news/update/${id}`
     },
+    banners: {
+      home: `/super-admin/banners`,
+      league: "/super-admin/news/league",
+      create: "/super-admin/banners/create",
+      edit: (id: number | string) => `/super-admin/banners/update/${id}`
+    },
     ads: {
       home: `/super-admin/ads`,
       create: "/super-admin/ads/create",

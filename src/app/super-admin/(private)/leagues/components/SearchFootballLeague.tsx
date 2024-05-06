@@ -29,7 +29,7 @@ export default function SearchFootballLeague({
     data: footballLeagues,
     isLoading: footballLeaguesLoading,
     refetch: footballLeagueRefetch
-  } = useGetPopularLeaguesQuery("football");
+  } = useGetPopularLeaguesQuery(null);
 
   const [
     addFootballLeague,
@@ -51,7 +51,7 @@ export default function SearchFootballLeague({
 
     if (addFootballLeagueSuccess) {
       if (addFootballLeagueResponse?.status) {
-        toast.success("Football League Added Successfully!");
+        toast.success("League Added Successfully!");
         footballLeagueRefetch();
       } else {
         toast.error(addFootballLeagueResponse?.message || "Something went wrong!");

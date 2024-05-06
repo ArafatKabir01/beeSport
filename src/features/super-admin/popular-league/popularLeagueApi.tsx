@@ -12,7 +12,7 @@ export const popularLeagueApi = apiSlice.injectEndpoints({
       query: () => "/api/admin/popular/football-leagues"
     }),
     getPopularLeagues: builder.query({
-      query: (category) => `/api/admin/popular-leagues?category=${category}`
+      query: () => `/api/v2/admin/leagues`
     }),
     getPopularCricketLeagues: builder.query({
       query: () => "/api/admin/popular/cricket-leagues"
@@ -29,7 +29,7 @@ export const popularLeagueApi = apiSlice.injectEndpoints({
     addPopularLeague: builder.mutation({
       query: (data) => {
         return {
-          url: `/api/admin/popular-leagues/create`,
+          url: `/api/v2/admin/leagues/create`,
           method: "POST",
           body: data
         };
@@ -52,7 +52,7 @@ export const popularLeagueApi = apiSlice.injectEndpoints({
     }),
     deletePopularLeague: builder.mutation({
       query: (id) => ({
-        url: `/api/admin/popular-leagues/${id}`,
+        url: `/api/v2/admin/leagues/${id}`,
         method: "DELETE"
       })
     }),

@@ -14,7 +14,7 @@ export default function PopularFootballLeague() {
   const [leagueList, setLeagueList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
+  const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery(null);
 
 
   const [deleteFootballLeague, { isSuccess: deleteLeagueSuccess, isError: deleteLeagueError }] =

@@ -29,6 +29,11 @@ export const fixtureApi = apiSlice.injectEndpoints({
         `/api/v2/admin/fixtures?page=${page}&limit=${limit}`,
       providesTags : ["fixtures"]
     }),
+    getAllOwnFixture: builder.query({
+      query: () =>
+        `/api/v2/admin/fixtures/own-fixtures`,
+      providesTags : ["fixtures"]
+    }),
     getFixtureById: builder.query({
       query: (fixtureId) =>
         `/api/v2/admin/fixtures/${fixtureId}`,
@@ -65,4 +70,4 @@ export const fixtureApi = apiSlice.injectEndpoints({
   })
 });
 
-export const { useGetFootballFixturesQuery, useCheckHighlightsQuery, useGetCricketV2FixturesQuery, useCreateFixtureMutation, useGetAllFixtureQuery, useGetFixtureByIdQuery, useUpdateFixtureMutation, useDeleteFixtureMutation, useRefreashFixtureMutation} = fixtureApi;
+export const { useGetFootballFixturesQuery, useCheckHighlightsQuery, useGetCricketV2FixturesQuery, useCreateFixtureMutation, useGetAllFixtureQuery, useGetFixtureByIdQuery, useUpdateFixtureMutation, useDeleteFixtureMutation, useRefreashFixtureMutation, useGetAllOwnFixtureQuery} = fixtureApi;

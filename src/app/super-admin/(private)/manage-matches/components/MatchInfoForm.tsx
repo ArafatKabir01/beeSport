@@ -17,8 +17,9 @@ export default function MatchInfoForm({
     value: any;
     props: any;
   };
+
   const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
-  console.log("fjjf", footballLeagues?.data?.docs)
+  
   return (
     <FormBlockWrapper title="Match Information">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -157,6 +158,21 @@ export default function MatchInfoForm({
                 <select className="select select-bordered" {...field}>
                   <option value="1">Active</option>
                   <option value="0">Inactive</option>
+                </select>
+              </label>
+            </>
+          )}
+        </Field>
+        <Field name="live_status">
+          {({ field }: { field: any }) => (
+            <>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text font-semibold">Live Status</span>
+                </div>
+                <select className="select select-bordered" {...field}>
+                  <option value="1">True</option>
+                  <option value="0">False</option>
                 </select>
               </label>
             </>

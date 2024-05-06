@@ -3,7 +3,7 @@ import {
   useGetPopularLeaguesQuery,
   useLeagueSearchQuery
 } from "@/features/super-admin/popular-league/popularLeagueApi";
-import { useTeamSearchQuery, useAddTeamMutation } from "@/features/super-admin/teams/teamApi";
+import { useTeamSearchQuery, useAddTeamMutation, useGetTeamsQuery } from "@/features/super-admin/teams/teamApi";
 import useDebounce from "@/hooks/use-debounce";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -14,7 +14,7 @@ import { PiListMagnifyingGlassLight } from "react-icons/pi";
 import { RxCross2 } from "react-icons/rx";
 import { ActionIcon, Input, Loader, Modal, Title } from "rizzui";
 
-export default function SearchFootballLeague({
+export default function SearchTeam({
   isOpen,
   setIsOpen
 }: {
@@ -24,16 +24,9 @@ export default function SearchFootballLeague({
   const [searchText, setSearchText] = useState("");
   const debounceText = useDebounce(searchText, 500);
   const [skip, setSkip] = useState(true);
-  const { data, isFetching } = useLeagueSearchQuery(debounceText, { skip });
-  const {data : searchTeams} = useTeamSearchQuery(debounceText, { skip });
+  const {data : searchTeams, isFetching} = useTeamSearchQuery(debounceText, { skip });
+  const { data: teams, isLoading: footballLeaguesLoading, refetch : footballLeagueRefetch } = useGetTeamsQuery({});
 
-  console.log("searchTeams", searchTeams);
-
-  const {
-    data: footballLeagues,
-    isLoading: footballLeaguesLoading,
-    refetch: footballLeagueRefetch
-  } = useGetPopularLeaguesQuery("football");
 
   const [
     addTeam,
@@ -46,7 +39,7 @@ export default function SearchFootballLeague({
     } else {
       setSkip(true);
     }
-  }, [data, debounceText]);
+  }, [searchTeams, debounceText]);
 
   useEffect(() => {
     if (addTeamError) {
@@ -55,7 +48,7 @@ export default function SearchFootballLeague({
 
     if (addTeamSuccess) {
       if (addTeamResponse?.status) {
-        toast.success("Football League Added Successfully!");
+        toast.success("Team Added Successfully!");
         footballLeagueRefetch();
       } else {
         toast.error(addTeamResponse?.message || "Something went wrong!");
@@ -63,8 +56,8 @@ export default function SearchFootballLeague({
     }
   }, [addTeamError, addTeamResponse, addTeamSuccess, footballLeagueRefetch]);
 
-  const selectedLeagueIds = footballLeagues?.data?.docs?.map((item: any) => item.id);
-  const suggestedLeagueData = data?.data?.filter((item: any) => !selectedLeagueIds?.includes(item?.id));
+  const selectedTeamIds = teams?.data?.map((item: any) => item.teamId);
+  const suggestedTeamData = searchTeams?.data?.filter((item: any) => !selectedTeamIds?.includes(item?.id));
 
   // Add Handler
   const handleLeagueData = (data: any) => {
@@ -74,14 +67,6 @@ export default function SearchFootballLeague({
       name : data?.name,
       image : data?.image_path
     })
-    // addFootballLeague({
-    //   id: data?.id,
-    //   name: data?.name,
-    //   image_path: data?.image_path,
-    //   country: data?.country?.name,
-    //   category: "football",
-    //   currentSeason: data?.currentseason?.id
-    // });
   };
 
   return (
@@ -107,7 +92,7 @@ export default function SearchFootballLeague({
           />
           <div className='h-64 overflow-y-auto'>
             <ul>
-              {searchTeams?.data?.map((item: any) => (
+              {suggestedTeamData?.map((item: any) => (
                 <li key={item?.id} className='mb-3 rounded-md border border-slate-200 p-2'>
                   <div className='flex justify-between gap-2 items-center'>
                     <div className='flex items-center gap-2'>
@@ -131,7 +116,7 @@ export default function SearchFootballLeague({
                 </li>
               )}
 
-              {!data?.status && (
+              {!searchTeams?.status && (
                 <li className='mb-3 rounded-md border border-slate-200 p-2'>
                   <div className='flex justify-center items-center'>No Team Available!</div>
                 </li>

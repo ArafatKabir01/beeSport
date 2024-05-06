@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import TabButtonItem from "../../components/TabButtonItem";
-import PopularCricketLeague from "./PopularCricketLeague";
-import PopularFootballLeague from "./PopularFootballLeague";
+import PopularTeam from "./PopularTeam";
 
-export default function FootballEntitiesContainer() {
+export default function TeamEntitiesContainer() {
   const [currentTab, setCurrentTab] = useState(0);
 
   const tabs = ["Football", "Cricket"];
@@ -30,7 +29,7 @@ export default function FootballEntitiesContainer() {
           <div hidden={currentTab === 1 ? false : true}>
             <PopularCricketLeague />
           </div> */}
-          <PopularFootballLeague />
+          <PopularTeam />
         </div>
       </div>
     </div>

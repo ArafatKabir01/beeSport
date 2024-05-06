@@ -3,8 +3,8 @@ import { BiVideoRecording } from "react-icons/bi";
 import { FaCogs } from "react-icons/fa";
 import { IoCalendarOutline, IoNewspaperOutline, IoShieldHalfSharp } from "react-icons/io5";
 import { LuLayoutDashboard, LuUsers } from "react-icons/lu";
-import { MdOutlineTipsAndUpdates } from "react-icons/md";
-import { PiTelevisionFill } from "react-icons/pi";
+import { MdHighlight, MdOutlineTipsAndUpdates } from "react-icons/md";
+import { PiMicrosoftTeamsLogoLight, PiTelevisionFill } from "react-icons/pi";
 import { SiGoogleads } from "react-icons/si";
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
@@ -36,7 +36,7 @@ export const menuItems = [
   {
     name: "Highlights",
     href: routes.admin.highlights.home,
-    icon: <PiTelevisionFill />
+    icon: <MdHighlight />
   },
   {
     name: "Leagues",
@@ -46,12 +46,17 @@ export const menuItems = [
   {
     name: "Teams",
     href: routes.admin.teams,
-    icon: <IoShieldHalfSharp />
+    icon: <PiMicrosoftTeamsLogoLight />
   },
   {
     name: "Manage Users",
     href: routes.admin.manageUser,
     icon: <LuUsers />
+  },
+  {
+    name: "Banners",
+    href: routes.admin.banners.home,
+    icon: <IoNewspaperOutline />
   },
   // {
   //   name: "ADS",

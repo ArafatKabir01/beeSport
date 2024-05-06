@@ -26,7 +26,7 @@ export default function Page() {
       <PageHeader
         title={pageHeader.title}
         breadcrumb={pageHeader.breadcrumb}
-        isLinkBtn={false}
+        isLinkBtn={true}
         isLinkBtnText='Add New Highlight'
         href={routes.admin.highlights.create}
       ></PageHeader>
