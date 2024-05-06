@@ -101,7 +101,6 @@ export default function LiveMatchCreate({ searchParams }: { searchParams: IFixtu
           : values?.team_two_image
     };
 
-    console.log("liveMatchData", liveMatchData);
 
     var formBody = new FormData();
 

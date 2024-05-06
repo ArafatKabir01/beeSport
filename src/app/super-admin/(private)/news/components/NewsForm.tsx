@@ -25,7 +25,6 @@ export default function NewsCreateFom({
   setNewsImage: any;
   newsImage: any;
 }) {
-  
   const { data: footballLeagues, isLoading: footballLeaguesLoading } = useGetPopularLeaguesQuery("football");
 
   const handleChange = (input: string) => {
@@ -46,6 +45,58 @@ export default function NewsCreateFom({
           <Field className='input input-bordered w-full bg-white' name='title' />
         </label>
       </div>
+
+      <div className='col-span-12 lg:col-span-6'>
+        <Field name='date'>
+          {({ field, meta }: { field: any; meta: any }) => (
+            <Flatpickr
+              value={values?.publishDate}
+              render={({ defaultValue, value, ...props }, ref) => (
+                <label className='form-control'>
+                  <div className='label'>
+                    <span className='label-text font-semibold'>
+                      Date{" "}
+                      <span className='text-red-600'>
+                        * {meta.touched && meta.error && <span>({meta.error})</span>}
+                      </span>
+                    </span>
+                  </div>
+                  <input
+                    type='text'
+                    className={`input input-bordered w-full ${meta.touched && meta.error && "input-error"}`}
+                    ref={ref}
+                    // {...props}
+                    placeholder='YYYY-MM-DD HH:MM'
+                  />
+                </label>
+              )}
+              options={{
+                onChange: function (selectedDates, dateStr) {
+                  setFieldValue("publishDate", dateStr);
+                },
+                enableTime: false,
+                disableMobile: true,
+                allowInput: false
+              }}
+            />
+          )}
+        </Field>
+      </div>
+      <div className='col-span-12 lg:col-span-6'>
+        <label className='form-control w-full'>
+          <div className='label'>
+            <span className='label-text font-medium'>
+              Status <span className='text-red-500'>*</span>{" "}
+              <ErrorMessage name='title' component='span' className='text-sm text-red-600' />
+            </span>
+          </div>
+          <Field as='select' className='select select-bordered w-full bg-white' name='status'>
+            <option value='1'>Active</option>
+            <option value='0'>Inactive</option>
+          </Field>
+        </label>
+      </div>
+
       {/* <div className='col-span-6'>
         <label className='form-control w-full'>
           <div className='label'>
@@ -60,7 +111,7 @@ export default function NewsCreateFom({
           </Field>
         </label>
       </div> */}
-      <div className='col-span-6'>
+      <div className='col-span-12 lg:col-span-6'>
         <label className='form-control w-full'>
           <div className='label'>
             <span className='label-text font-medium'>
@@ -72,51 +123,18 @@ export default function NewsCreateFom({
             <Field as='select' className='input input-bordered w-full bg-white' name='league'>
               <option value=''>Select One</option>
 
-              {
-                footballLeagues?.data?.docs?.map((league: any) => {
-                  return (
-                    <option key={league.id} value={league.name}>
-                      {league.name}
-                    </option>
-                  );
-                })
-                }
+              {footballLeagues?.data?.docs?.map((league: any) => {
+                return (
+                  <option key={league.id} value={league.name}>
+                    {league.name}
+                  </option>
+                );
+              })}
             </Field>
           )}
         </label>
       </div>
-      <div className='col-span-12'>
-        <label className='form-control w-full'>
-          <div className='label'>
-            <span className='label-text font-medium'>
-              Short Description <span className='text-red-500'>*</span>{" "}
-              <ErrorMessage name='shortDescription' component='span' className='text-sm text-red-600' />
-            </span>
-          </div>
-          <Field as='textarea' className='input input-bordered h-40 w-full bg-white p-5' name='shortDescription' />
-        </label>
-      </div>
-
-      <div className='col-span-12'>
-        <label className='form-control w-full'>
-          <div className='label'>
-            <span className='label-text font-medium'>
-              Description <span className='text-red-500'>*</span>{" "}
-              <ErrorMessage name='description' component='span' className='text-sm text-red-600' />
-            </span>
-          </div>
-
-          <QuillEditor
-            value={values.description}
-            onChange={handleChange}
-            label=''
-            className='col-span-full [&_.ql-editor]:min-h-[100px]'
-            labelClassName='font-medium text-gray-700 dark:text-gray-600 mb-1.5'
-          />
-        </label>
-      </div>
-
-      <div className='col-span-6'>
+      <div className='col-span-12 lg:col-span-6'>
         <label className='form-control w-full'>
           <div className='label'>
             <span className='label-text font-medium'>
@@ -178,54 +196,35 @@ export default function NewsCreateFom({
           </div>
         )}
       </div>
-      <div className='col-span-6'>
-        <Field name='date'>
-          {({ field, meta }: { field: any; meta: any }) => (
-            <Flatpickr
-              value={values?.publishDate}
-              render={({ defaultValue, value, ...props }, ref) => (
-                <label className='form-control'>
-                  <div className='label'>
-                    <span className='label-text font-semibold'>
-                      Date{" "}
-                      <span className='text-red-600'>
-                        * {meta.touched && meta.error && <span>({meta.error})</span>}
-                      </span>
-                    </span>
-                  </div>
-                  <input
-                    type='text'
-                    className={`input input-bordered w-full ${meta.touched && meta.error && "input-error"}`}
-                    ref={ref}
-                    // {...props}
-                    placeholder='YYYY-MM-DD HH:MM'
-                  />
-                </label>
-              )}
-              options={{
-                onChange: function (selectedDates, dateStr) {
-                  setFieldValue("publishDate", dateStr);
-                },
-                enableTime: false,
-                disableMobile: true,
-                allowInput: false
-              }}
-            />
-          )}
-        </Field>
-      </div>
-      <div className='col-span-6'>
+
+      <div className='col-span-12'>
         <label className='form-control w-full'>
           <div className='label'>
             <span className='label-text font-medium'>
-              Status <span className='text-red-500'>*</span>{" "}
-              <ErrorMessage name='title' component='span' className='text-sm text-red-600' />
+              Short Description <span className='text-red-500'>*</span>{" "}
+              <ErrorMessage name='shortDescription' component='span' className='text-sm text-red-600' />
             </span>
           </div>
-          <Field as='select' className='select select-bordered w-full bg-white' name='status'>
-            <option value='1'>Active</option>
-            <option value='0'>Inactive</option>
-          </Field>
+          <Field as='textarea' className='input input-bordered min-h-24 w-full bg-white p-5' name='shortDescription' />
+        </label>
+      </div>
+
+      <div className='col-span-12'>
+        <label className='form-control w-full'>
+          <div className='label'>
+            <span className='label-text font-medium'>
+              Description <span className='text-red-500'>*</span>{" "}
+              <ErrorMessage name='description' component='span' className='text-sm text-red-600' />
+            </span>
+          </div>
+
+          <QuillEditor
+            value={values.description}
+            onChange={handleChange}
+            label=''
+            className='col-span-full [&_.ql-editor]:min-h-[140px]'
+            labelClassName='font-medium text-gray-700 dark:text-gray-600 mb-1.5'
+          />
         </label>
       </div>
     </div>

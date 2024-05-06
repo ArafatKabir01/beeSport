@@ -2,7 +2,6 @@ import PageHeader from "@/app/shared/page-header";
 import { routes } from "@/config/routes";
 import { metaObject } from "@/config/site.config";
 import LiveMatchIndex from "./components/LiveMatchIndex";
-import HighlightIndex from "../own-fixtures/components/HighlightIndex";
 
 const pageHeader = {
   title: "Manage Live Matches",
@@ -31,8 +30,8 @@ export default function Page() {
         isLinkBtnText='Add New Live Match'
         href={routes.admin.manageLive.create}
       ></PageHeader>
-      <HighlightIndex />
-      {/* <LiveMatchIndex /> */}
+      {/* <HighlightIndex /> */}
+      <LiveMatchIndex />
     </>
   );
 }

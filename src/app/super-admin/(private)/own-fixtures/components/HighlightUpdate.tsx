@@ -40,7 +40,6 @@ export default function HighlightUpdate({ highlightId }: { highlightId: number }
     status: "1"
   });
 
-  console.log("fixtu", fixture);
 
   useEffect(() => {
     if (isFixtureSuccess) {

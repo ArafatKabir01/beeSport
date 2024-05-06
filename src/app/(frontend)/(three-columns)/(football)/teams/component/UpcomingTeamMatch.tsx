@@ -6,7 +6,6 @@ const UpcomingTeamMatch = ({ teamId }: { teamId: any }) => {
   const { isLoading, data: fixtureData } = useGetFixtureDataQuery(undefined);
 
   const { data: teams, isLoading: teamsLoading } = useGetTeamInfoQuery(undefined);
-  console.log("fixtureData", fixtureData);
   if (isLoading || teamsLoading) {
     return <h2>Loading...</h2>;
   }
@@ -14,7 +13,6 @@ const UpcomingTeamMatch = ({ teamId }: { teamId: any }) => {
     (fixture: any) => fixture?.participants.filter((team: any) => team.id === Number(teamId))
   );
   const team = teams?.data?.find((team: any) => team?.teamId === Number(teamId));
-  console.log("leagueFixture", leagueFixture);
   return (
     <div>
       <div className='flex items-center gap-2 my-4'>

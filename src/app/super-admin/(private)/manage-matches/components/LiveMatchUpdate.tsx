@@ -43,7 +43,6 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
     streaming_sources: getStreamObject(false)
   });
 
-  console.log("liveMatch", liveMatch);
 
   useEffect(() => {
     if (!isLoading) {
@@ -155,7 +154,6 @@ export default function LiveMatchUpdate({ liveMatchId }: { liveMatchId: number }
       ? formBody.append("team_two_image", teamTwoImage)
       : formBody.append("team_two_image_url", liveMatchData?.team_two_image);
 
-      console.log("ukpdated clicked")
 
     updateLiveMatch({ id: liveMatchId, data: formBody });
   };
