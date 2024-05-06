@@ -1,8 +1,9 @@
 import {
-  useAddPopularLeagueMutation,
-  useGetCricketLeaguesQuery,
-  useGetPopularLeaguesQuery
+  useGetPopularLeaguesQuery,
+  useLeagueSearchQuery
 } from "@/features/super-admin/popular-league/popularLeagueApi";
+import { useAddTeamMutation, useTeamSearchQuery } from "@/features/super-admin/teams/teamApi";
+import useDebounce from "@/hooks/use-debounce";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BsXCircleFill } from "react-icons/bs";
@@ -10,9 +11,9 @@ import { HiPlus } from "react-icons/hi";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import { PiListMagnifyingGlassLight } from "react-icons/pi";
 import { RxCross2 } from "react-icons/rx";
-import { ActionIcon, Input, Modal, Title } from "rizzui";
+import { ActionIcon, Input, Loader, Modal, Title } from "rizzui";
 
-export default function SearchCricketLeague({
+export default function SearchFootballTeam({
   isOpen,
   setIsOpen
 }: {
@@ -20,48 +21,60 @@ export default function SearchCricketLeague({
   setIsOpen: (value: boolean) => void;
 }) {
   const [searchText, setSearchText] = useState("");
-  const { data: cricketLeagues, isLoading } = useGetCricketLeaguesQuery(undefined);
+  const debounceText = useDebounce(searchText, 500);
+  const [skip, setSkip] = useState(true);
+  const { data, isFetching } = useLeagueSearchQuery(debounceText, { skip });
+  const { data: searchTeams } = useTeamSearchQuery(debounceText, { skip });
 
   const {
-    data: cricketPopularLeagues,
-    isLoading: cricketPopularLeaguesLoading,
-    refetch: cricketPopularLeagueRefetch
-  } = useGetPopularLeaguesQuery("cricket");
+    data: footballLeagues,
+    isLoading: footballLeaguesLoading,
+    refetch: footballLeagueRefetch
+  } = useGetPopularLeaguesQuery("football");
 
-  const [
-    addCricketLeague,
-    { data: addCricketLeagueResponse, isSuccess: addCricketLeagueSuccess, isError: addCricketLeagueError }
-  ] = useAddPopularLeagueMutation();
+  const [addTeam, { data: addTeamResponse, isSuccess: addTeamSuccess, isError: addTeamError }] = useAddTeamMutation();
 
   useEffect(() => {
-    if (addCricketLeagueError) {
-      toast.error("Something went wrong!");
+    if (debounceText.length >= 3) {
+      setSkip(false);
+    } else {
+      setSkip(true);
+    }
+  }, [data, debounceText]);
+
+  useEffect(() => {
+    if (addTeamError) {
+      toast.error("Already have created team");
     }
 
-    if (addCricketLeagueSuccess) {
-      if (addCricketLeagueResponse?.status) {
-        toast.success("Cricket League Added Successfully!");
-        cricketPopularLeagueRefetch();
+    if (addTeamSuccess) {
+      if (addTeamResponse?.status) {
+        toast.success("Football League Added Successfully!");
+        footballLeagueRefetch();
       } else {
-        toast.error(addCricketLeagueResponse?.message || "Something went wrong!");
+        toast.error(addTeamResponse?.message || "Something went wrong!");
       }
     }
-  }, [addCricketLeagueError, addCricketLeagueResponse, addCricketLeagueSuccess, cricketPopularLeagueRefetch]);
+  }, [addTeamError, addTeamResponse, addTeamSuccess, footballLeagueRefetch]);
 
-  const selectedLeagueIds = cricketPopularLeagues?.data?.docs.map((item: any) => item.id);
-  const suggestedLeagueData = cricketLeagues?.data?.filter((item: any) => !selectedLeagueIds?.includes(item?.id));
-  const suggestedFilterData = suggestedLeagueData?.map((league: any) => league?.name);
+  const selectedLeagueIds = footballLeagues?.data?.docs?.map((item: any) => item.id);
+  const suggestedLeagueData = data?.data?.filter((item: any) => !selectedLeagueIds?.includes(item?.id));
 
   // Add Handler
   const handleLeagueData = (data: any) => {
-    addCricketLeague({
-      id: data?.id,
+    addTeam({
+      teamId: data?.id,
       name: data?.name,
-      image_path: data?.image_path,
-      country: data?.country?.name,
-      category: "cricket",
-      currentSeason: data?.season_id
+      image: data?.image_path
     });
+    // addFootballLeague({
+    //   id: data?.id,
+    //   name: data?.name,
+    //   image_path: data?.image_path,
+    //   country: data?.country?.name,
+    //   category: "football",
+    //   currentSeason: data?.currentseason?.id
+    // });
   };
 
   return (
@@ -70,7 +83,7 @@ export default function SearchCricketLeague({
         <div className='mb-7 flex items-center justify-between'>
           <Title as='h3' className='flex items-center'>
             <PiListMagnifyingGlassLight className='text-2xl mr-1' />
-            Search & Add League
+            Search & Add Team
           </Title>
           <ActionIcon size='sm' variant='text' onClick={() => setIsOpen(false)} className='hover:text-error'>
             <BsXCircleFill className='text-2xl' />
@@ -83,11 +96,11 @@ export default function SearchCricketLeague({
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<HiMiniMagnifyingGlass className='w-4 text-xl' />}
             suffix={<RxCross2 className='w-4 text-xl cursor-pointer' onClick={() => setSearchText("")} />}
-            placeholder='Premier League'
+            placeholder='Team'
           />
           <div className='h-64 overflow-y-auto'>
             <ul>
-              {suggestedLeagueData?.map((item: any) => (
+              {searchTeams?.data?.map((item: any) => (
                 <li key={item?.id} className='mb-3 rounded-md border border-slate-200 p-2'>
                   <div className='flex justify-between gap-2 items-center'>
                     <div className='flex items-center gap-2'>
@@ -101,7 +114,7 @@ export default function SearchCricketLeague({
                 </li>
               ))}
 
-              {/* {isFetching && (
+              {isFetching && (
                 <li className='mb-3 rounded-md p-2'>
                   <div className='flex justify-center items-center'>
                     <Loader variant='pulse' size='lg' />
@@ -113,9 +126,9 @@ export default function SearchCricketLeague({
 
               {!data?.status && (
                 <li className='mb-3 rounded-md border border-slate-200 p-2'>
-                  <div className='flex justify-center items-center'>No League Available!</div>
+                  <div className='flex justify-center items-center'>No Team Available!</div>
                 </li>
-              )} */}
+              )}
             </ul>
           </div>
         </div>

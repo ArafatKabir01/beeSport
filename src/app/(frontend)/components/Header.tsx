@@ -8,7 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { Avatar, Button, Dropdown, Input, Text } from "rizzui";
+import { Avatar, Dropdown, Text } from "rizzui";
 import "./header.css";
 
 interface AuthButtonProps {
@@ -41,8 +41,8 @@ export default function Header() {
     <header>
       <div className=''>
         <div className='hidden lg:block'>
-          <div className='relative mx-auto w-full py-4 '>
-            <div className='absolute inset-0 origin-bottom-right transform bg-[#FFFFFF]'></div>
+          <div className='relative mx-auto w-full py-4 px-4'>
+            <div className='absolute inset-0 origin-bottom-right transform bg-[#FFFFFF] '></div>
             <div className='relative mx-auto max-w-[1400px]'>
               <div className='grid grid-cols-12'>
                 <Link href={routes.home} className='flex items-center col-span-2'>
@@ -86,19 +86,23 @@ export default function Header() {
                   </Link>
                 </ul>
                 <div className='col-span-6 justify-self-end  flex gap-3'>
-                  <Input type='email' placeholder='Search..' />
-                  <Button className='bg-[#EE1E46] text-white hover:bg-black'>Secondary</Button>
+                  {/* <Input type='email' placeholder='Search..' />
+                  <Button className='bg-[#EE1E46] text-white hover:bg-black'>Secondary</Button> */}
                   <Dropdown placement='bottom-end'>
                     <Dropdown.Trigger>
                       <Avatar
                         name='John Doe'
                         src='https://randomuser.me/api/portraits/women/40.jpg'
-                        className='cursor-pointer'
+                        className='cursor-pointer rounded-full'
                       />
                     </Dropdown.Trigger>
                     <Dropdown.Menu className='w-56 divide-y text-gray-600'>
                       <Dropdown.Item className='hover:bg-transparent'>
-                        <Avatar name='John Doe' src='https://randomuser.me/api/portraits/women/40.jpg' />
+                        <Avatar
+                          name='John Doe'
+                          src='https://randomuser.me/api/portraits/women/40.jpg'
+                          className='rounded-full'
+                        />
                         <span className='ml-2 text-start'>
                           <Text className='text-gray-900 font-medium leading-tight'>Mary Hoops</Text>
                           <Text>maryhe@demo.io</Text>
@@ -110,7 +114,7 @@ export default function Header() {
                         <Dropdown.Item className='hover:bg-gray-900 hover:text-gray-50'>License</Dropdown.Item>
                       </div>
                       <div className='mt-2 pt-2'>
-                        <Dropdown.Item className='hover:bg-gray-900 hover:text-gray-50'>Sign Out</Dropdown.Item>
+                        <Dropdown.Item className='hover:bg-red-500 hover:text-gray-50'>Sign Out</Dropdown.Item>
                       </div>
                     </Dropdown.Menu>
                   </Dropdown>

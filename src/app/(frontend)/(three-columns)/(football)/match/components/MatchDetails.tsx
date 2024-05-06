@@ -20,7 +20,6 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
   const { data: liveMatch, isLoading: streamSourcesLoading } = useGetFixtureLiveIdQuery(fixtureId) as any;
 
   const streamSources = liveMatch?.data?.streaming_sources;
-  console.log("liveMatch", liveMatch);
   const formatDate = (timestamp: any) => new Date(timestamp * 1000);
   const isWithin15MinutesBeforeMatch = (timestamp: any) => {
     const fifteenMinutesBeforeMatch = new Date(formatDate(timestamp));
@@ -155,7 +154,8 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
       <div className='visible m-2 mb-20 pb-2 md:mb-16 lg:m-0 lg:mb-0 '>
         <div className='bg-white p-3 rounded-lg '>
           <h2 className='text-xl font-bold my-5'>Hot Matches</h2>
-          <FixtureCard fixtureData={hotFixture} />
+
+          {hotFixture?.map((fixture: any) => <FixtureCard key={fixture?.id} fixture={fixture} />)}
         </div>
       </div>
     </div>

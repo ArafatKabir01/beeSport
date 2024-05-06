@@ -30,12 +30,11 @@ export default function FootballFixtureList({ pickerDate }: { pickerDate: string
     skip
   });
 
-
-  const selectedFixtures = footballLeagues?.data?.docs?.map((league : any) => {
-    return fixtures?.data?.find((fixture : any) => fixture?.id === league?.id)
-  })?.filter((item : any) => item !== undefined);
- 
-  console.log("selected leagues", selectedFixtures);
+  const selectedFixtures = footballLeagues?.data?.docs
+    ?.map((league: any) => {
+      return fixtures?.data?.find((fixture: any) => fixture?.id === league?.id);
+    })
+    ?.filter((item: any) => item !== undefined);
 
   const { data: generalSettings, isLoading, isError } = useGetGeneralSettingsQuery(undefined);
 
@@ -184,22 +183,22 @@ export default function FootballFixtureList({ pickerDate }: { pickerDate: string
                               </Link>
                             )} */}
                             <Link
-                                // href={`${routes.admin.ownFixtures.create}?fixture_id=${fixture?.id}&match_title=${fixture?.name}&time=${moment
-                                //   .utc(fixture?.starting_at)
-                                //   .utcOffset(offset)
-                                //   .format("YYYY-MM-DD HH:mm")}&category=football`}
-                                href={`${routes.admin.manageMatch.create}?fixture_id=${fixture?.id}&match_title=${fixture
-                                  ?.league?.name}&t1_name=${fixture?.participants[0]?.name}&t1_img=${fixture
-                                  ?.participants[0]?.image_path}&t2_name=${fixture?.participants[1]
-                                  ?.name}&t2_img=${fixture?.participants[1]?.image_path}&time=${moment
-                                  .utc(fixture?.starting_at)
-                                  .utcOffset(offset)
-                                  .format("YYYY-MM-DD HH:mm")}&state=${fixture?.state?.state}`}
-                              >
-                                <Button size='sm' variant='outline'>
-                                  <HiPlus className='text-base mr-1' /> Add Fixture
-                                </Button>
-                              </Link>
+                              // href={`${routes.admin.ownFixtures.create}?fixture_id=${fixture?.id}&match_title=${fixture?.name}&time=${moment
+                              //   .utc(fixture?.starting_at)
+                              //   .utcOffset(offset)
+                              //   .format("YYYY-MM-DD HH:mm")}&category=football`}
+                              href={`${routes.admin.manageMatch.create}?fixture_id=${fixture?.id}&match_title=${fixture
+                                ?.league?.name}&t1_name=${fixture?.participants[0]?.name}&t1_img=${fixture
+                                ?.participants[0]?.image_path}&t2_name=${fixture?.participants[1]
+                                ?.name}&t2_img=${fixture?.participants[1]?.image_path}&time=${moment
+                                .utc(fixture?.starting_at)
+                                .utcOffset(offset)
+                                .format("YYYY-MM-DD HH:mm")}&state=${fixture?.state?.state}`}
+                            >
+                              <Button size='sm' variant='outline'>
+                                <HiPlus className='text-base mr-1' /> Add Fixture
+                              </Button>
+                            </Link>
                           </td>
                         </tr>
                       );

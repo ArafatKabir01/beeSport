@@ -5,7 +5,6 @@ import { Collapse } from "@/components/ui/collapse";
 import SimpleBar from "@/components/ui/simplebar";
 import { Title } from "@/components/ui/text";
 import cn from "@/utils/class-names";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
@@ -22,8 +21,12 @@ export default function Sidebar({ className }: { className?: string }) {
       )}
     >
       <div className='sticky top-0 z-40 bg-gray-0/10 px-6 pb-2 pt-2 2xl:px-6 2xl:pt-2 dark:bg-gray-100/5'>
-        <Link href={"/"} aria-label='Site Logo'>
-          <Image src='/images/maha-logo.png' width={150} height={20} alt='logo' className='m-auto' />
+        <Link href={"/"} aria-label='Site Logo' className='flex items-center justify-center'>
+          {/* <Image src='/images/maha-logo.png' width={150} height={20} alt='logo' className='m-auto' /> */}
+
+          <h2 className='text-3xl font-bold mt-3'>
+            Bee<span className='text-[#EE1E46]'>Sport</span>
+          </h2>
         </Link>
       </div>
 

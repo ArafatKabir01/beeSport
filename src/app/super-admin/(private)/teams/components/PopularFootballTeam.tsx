@@ -2,16 +2,17 @@ import { useDeleteTeamMutation, useGetTeamsQuery } from "@/features/super-admin/
 import { arrayMove } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaSort } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
 import { ImBin } from "react-icons/im";
 import { Button, Popover, Text, Title } from "rizzui";
-import SearchTeam from "./SearchTeam";
+import SearchFootballTeam from "./SearchFootballTeam";
 
-export default function PopularTeam() {
-  const [leagueList, setLeagueList] = useState([]);
+export default function PopularFootballTeam() {
+  const [teamList, setTeamList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: teams, isLoading: footballLeaguesLoading, refetch } = useGetTeamsQuery({});
+  const { data: teams, isLoading: footballTeamsLoading, refetch } = useGetTeamsQuery({});
 
   const [deleteTeam, { isSuccess: deleteTeamSuccess, isError: deleteTeamError }] = useDeleteTeamMutation();
 
@@ -21,7 +22,7 @@ export default function PopularTeam() {
     }
 
     if (deleteTeamSuccess) {
-      toast.success("League Deleted Successfully!");
+      toast.success("Team Deleted Successfully!");
       refetch();
     }
   }, [deleteTeamError, deleteTeamSuccess, refetch]);
@@ -30,24 +31,24 @@ export default function PopularTeam() {
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      const activeIndex = leagueList.findIndex((item: any) => item.id === active.id);
-      const overIndex = leagueList.findIndex((item: any) => item.id === over.id);
-      const newItems = arrayMove(leagueList, activeIndex, overIndex);
+      const activeIndex = teamList.findIndex((item: any) => item.id === active.id);
+      const overIndex = teamList.findIndex((item: any) => item.id === over.id);
+      const newItems = arrayMove(teamList, activeIndex, overIndex);
       newItems.forEach((item: any, index: number) => {
         item.position = index + 1;
       });
 
-      setLeagueList(newItems);
+      setTeamList(newItems);
 
-      const leagueIdWithPosition = newItems.map((item: any) => {
+      const teamIdWithPosition = newItems.map((item: any) => {
         return { id: item.id, position: item.position };
       });
 
       try {
         // setIsSorting(true);
         // const { data } = await mahaScoreBackendUrl.post(
-        //   '/api/admin/popular-leagues/sort',
-        //   leagueIdWithPosition,
+        //   '/api/admin/popular-teams/sort',
+        //   teamIdWithPosition,
         //   {
         //     headers: { Authorization: `Bearer ${session?.user?.accessToken}` },
         //   }
@@ -80,14 +81,16 @@ export default function PopularTeam() {
                 <li key={team.teamId} className='mb-3 rounded-md border border-slate-200 p-2'>
                   <div className='grid grid-cols-12'>
                     <div className='flex items-center gap-2 col-span-6'>
+                      <div className='px-3'>
+                        <FaSort className='text-2xl text-red-400 cursor-grab' />
+                      </div>
                       <img src={team.image} alt={team.name} className='w-8 h-8 rounded-full' />
                       <span className='font-medium text-base'>{team.name}</span>
                     </div>
-                    {/* <ImBin className='text-xl text-error cursor-pointer' /> */}
                     <div className='col-span-6 flex justify-end'>
                       <Popover enableOverlay placement='left-start'>
                         <Popover.Trigger>
-                          <Button variant='outline' color='danger'>
+                          <Button variant='text' color='danger'>
                             <ImBin className='text-xl text-error cursor-pointer' />
                           </Button>
                         </Popover.Trigger>
@@ -95,7 +98,7 @@ export default function PopularTeam() {
                           {({ setOpen }) => (
                             <div className='w-56'>
                               <Title as='h6'>Delete Confirmation</Title>
-                              <Text>Are you sure you want to delete the team?</Text>
+                              <Text>Are you sure you want to delete this team?</Text>
                               <div className='flex justify-end gap-3 mb-1'>
                                 <Button size='sm' variant='outline' onClick={() => setOpen(false)}>
                                   No
@@ -120,43 +123,10 @@ export default function PopularTeam() {
               );
             })}
           </ul>
-
-          {/* <div className="w-full rounded-box">
-            {popularLeaguesLoading ? (
-              <div className="flex h-44 justify-center p-5">
-                <div className="animate-bounce">
-                  <FaVolleyballBall className="animate-spin text-3xl text-secondary" />
-                </div>
-              </div>
-            ) : popularLeagues?.data.length > 0 ? (
-              <DndContext
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
-              >
-                <SortableContext
-                  strategy={verticalListSortingStrategy}
-                  items={leagueList}
-                >
-                  {popularLeagues?.data.map((league) => (
-                    <LeagueItem
-                      key={league._id}
-                      league={league}
-                      selectPointTableHandler={selectPointTableHandler}
-                      deleteLeagueHandler={deleteLeagueHandler}
-                    />
-                  ))}
-                </SortableContext>
-              </DndContext>
-            ) : (
-              <div className="mb-2 rounded-md border-slate-100 p-2 text-center font-medium">
-                No Data Found!
-              </div>
-            )}
-          </div> */}
         </div>
       </div>
 
-      <SearchTeam isOpen={isOpen} setIsOpen={setIsOpen} />
+      <SearchFootballTeam isOpen={isOpen} setIsOpen={setIsOpen} />
     </section>
   );
 }

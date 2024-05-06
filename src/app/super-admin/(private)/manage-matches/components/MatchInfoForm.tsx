@@ -1,17 +1,11 @@
-import 'flatpickr/dist/flatpickr.css';
-import 'flatpickr/dist/themes/dark.css';
-import { Field } from 'formik';
-import Flatpickr from 'react-flatpickr';
-import FormBlockWrapper from '../../components/FormBlockWrapper';
-import { useGetPopularLeaguesQuery } from '@/features/super-admin/popular-football-entity/popularFootballEntityApi';
+import { useGetPopularLeaguesQuery } from "@/features/super-admin/popular-football-entity/popularFootballEntityApi";
+import "flatpickr/dist/flatpickr.css";
+import "flatpickr/dist/themes/dark.css";
+import { Field } from "formik";
+import Flatpickr from "react-flatpickr";
+import FormBlockWrapper from "../../components/FormBlockWrapper";
 
-export default function MatchInfoForm({
-  values,
-  setFieldValue,
-}: {
-  values: any;
-  setFieldValue: any;
-}) {
+export default function MatchInfoForm({ values, setFieldValue }: { values: any; setFieldValue: any }) {
   type RenderProps = {
     defaultValue: any;
     value: any;
@@ -19,30 +13,22 @@ export default function MatchInfoForm({
   };
 
   const { data: footballLeagues, isLoading: footballLeaguesLoading, refetch } = useGetPopularLeaguesQuery("football");
-  
   return (
-    <FormBlockWrapper title="Match Information">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Field name="match_title">
+    <FormBlockWrapper title='Match Information' className='border border-gray-300 rounded-lg p-4'>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+        <Field name='match_title'>
           {({ field, meta }: { field: any; meta: any }) => (
             <>
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text font-semibold">
-                    Match Title{' '}
-                    <span className="text-red-600">
-                      *{' '}
-                      {meta.touched && meta.error && (
-                        <span>({meta.error})</span>
-                      )}
-                    </span>
+              <label className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text font-semibold'>
+                    Match Title{" "}
+                    <span className='text-red-600'>* {meta.touched && meta.error && <span>({meta.error})</span>}</span>
                   </span>
                 </div>
                 <input
-                  type="text"
-                  className={`input input-bordered w-full ${
-                    meta.touched && meta.error && 'input-error'
-                  }`}
+                  type='text'
+                  className={`input input-bordered w-full ${meta.touched && meta.error && "input-error"}`}
                   {...field}
                 />
               </label>
@@ -50,93 +36,84 @@ export default function MatchInfoForm({
           )}
         </Field>
 
-        <Field name="time">
+        <Field name='time'>
           {({ field, meta }: { field: any; meta: any }) => (
             <Flatpickr
               value={values?.time}
               render={({ defaultValue, value, ...props }, ref) => (
-                <label className="form-control w-full">
-                  <div className="label">
-                    <span className="label-text font-semibold">
-                      Match Time{' '}
-                      <span className="text-red-600">
-                        *{' '}
-                        {meta.touched && meta.error && (
-                          <span>({meta.error})</span>
-                        )}
+                <label className='form-control w-full'>
+                  <div className='label'>
+                    <span className='label-text font-semibold'>
+                      Match Time{" "}
+                      <span className='text-red-600'>
+                        * {meta.touched && meta.error && <span>({meta.error})</span>}
                       </span>
                     </span>
                   </div>
                   <input
-                    type="text"
-                    className={`input input-bordered w-full ${
-                      meta.touched && meta.error && 'input-error'
-                    }`}
+                    type='text'
+                    className={`input input-bordered w-full ${meta.touched && meta.error && "input-error"}`}
                     ref={ref}
                     // {...props}
-                    placeholder="YYYY-MM-DD HH:MM"
+                    placeholder='YYYY-MM-DD HH:MM'
                   />
                 </label>
               )}
               options={{
                 onChange: function (selectedDates, dateStr) {
-                  setFieldValue('time', dateStr);
+                  setFieldValue("time", dateStr);
                 },
                 enableTime: true,
                 disableMobile: true,
-                allowInput: false,
+                allowInput: false
               }}
             />
           )}
         </Field>
 
-        <Field name="fixture_id">
+        <Field name='fixture_id'>
           {({ field }: { field: any }) => (
             <>
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text font-semibold">Fixture ID</span>
+              <label className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text font-semibold'>Fixture ID</span>
                 </div>
-                <input
-                  type="text"
-                  className="input input-bordered w-full"
-                  {...field}
-                />
+                <input type='text' className='input input-bordered w-full' {...field} />
               </label>
             </>
           )}
         </Field>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Field name="is_hot">
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+        <Field name='is_hot'>
           {({ field }: { field: any }) => (
             <>
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text font-semibold">
-                    Is Hot Match?
-                  </span>
+              <label className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text font-semibold'>Is Hot Match?</span>
                 </div>
-                <select className="select select-bordered" {...field}>
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
+                <select className='select select-bordered' {...field}>
+                  <option value='0'>No</option>
+                  <option value='1'>Yes</option>
                 </select>
               </label>
             </>
           )}
         </Field>
-        <Field name="sports_type_name">
+        <Field name='sports_type_name'>
           {({ field }: { field: any }) => (
             <>
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text font-semibold">Leagues</span>
+              <label className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text font-semibold'>Leagues</span>
                 </div>
-                <select className="select select-bordered" {...field}>
-                  {
-                    footballLeagues?.data?.docs?.map((item : any) => <option key={item?.id} value={item?.name}>{item?.name}</option>)
-                  }
+                <select className='select select-bordered' {...field}>
+                  {footballLeagues?.data?.docs?.map((item: any) => (
+                    <option key={item?.id} value={item?.name}>
+                      {item?.name}
+                    </option>
+                  ))}
                   {/* <option value="football">Football</option>
                   <option value="cricket">Cricket</option>
                   <option value="basketball">Basketball</option>
@@ -148,31 +125,31 @@ export default function MatchInfoForm({
             </>
           )}
         </Field>
-        <Field name="status">
+        <Field name='status'>
           {({ field }: { field: any }) => (
             <>
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text font-semibold">Status</span>
+              <label className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text font-semibold'>Status</span>
                 </div>
-                <select className="select select-bordered" {...field}>
-                  <option value="1">Active</option>
-                  <option value="0">Inactive</option>
+                <select className='select select-bordered' {...field}>
+                  <option value='1'>Active</option>
+                  <option value='0'>Inactive</option>
                 </select>
               </label>
             </>
           )}
         </Field>
-        <Field name="live_status">
+        <Field name='live_status'>
           {({ field }: { field: any }) => (
             <>
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text font-semibold">Live Status</span>
+              <label className='form-control w-full'>
+                <div className='label'>
+                  <span className='label-text font-semibold'>Live Status</span>
                 </div>
-                <select className="select select-bordered" {...field}>
-                  <option value="1">True</option>
-                  <option value="0">False</option>
+                <select className='select select-bordered' {...field}>
+                  <option value='1'>True</option>
+                  <option value='0'>False</option>
                 </select>
               </label>
             </>

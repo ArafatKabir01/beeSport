@@ -1,9 +1,4 @@
-import {
-  useAddPopularLeagueMutation,
-  useGetPopularLeaguesQuery,
-  useLeagueSearchQuery
-} from "@/features/super-admin/popular-league/popularLeagueApi";
-import { useTeamSearchQuery, useAddTeamMutation, useGetTeamsQuery } from "@/features/super-admin/teams/teamApi";
+import { useAddTeamMutation, useGetTeamsQuery, useTeamSearchQuery } from "@/features/super-admin/teams/teamApi";
 import useDebounce from "@/hooks/use-debounce";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -14,24 +9,14 @@ import { PiListMagnifyingGlassLight } from "react-icons/pi";
 import { RxCross2 } from "react-icons/rx";
 import { ActionIcon, Input, Loader, Modal, Title } from "rizzui";
 
-export default function SearchTeam({
-  isOpen,
-  setIsOpen
-}: {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-}) {
+export default function SearchTeam({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (value: boolean) => void }) {
   const [searchText, setSearchText] = useState("");
   const debounceText = useDebounce(searchText, 500);
   const [skip, setSkip] = useState(true);
-  const {data : searchTeams, isFetching} = useTeamSearchQuery(debounceText, { skip });
-  const { data: teams, isLoading: footballLeaguesLoading, refetch : footballLeagueRefetch } = useGetTeamsQuery({});
+  const { data: searchTeams, isFetching } = useTeamSearchQuery(debounceText, { skip });
+  const { data: teams, isLoading: footballLeaguesLoading, refetch: footballLeagueRefetch } = useGetTeamsQuery({});
 
-
-  const [
-    addTeam,
-    { data: addTeamResponse, isSuccess: addTeamSuccess, isError: addTeamError }
-  ] = useAddTeamMutation();
+  const [addTeam, { data: addTeamResponse, isSuccess: addTeamSuccess, isError: addTeamError }] = useAddTeamMutation();
 
   useEffect(() => {
     if (debounceText.length >= 3) {
@@ -61,12 +46,11 @@ export default function SearchTeam({
 
   // Add Handler
   const handleLeagueData = (data: any) => {
-
     addTeam({
-      teamId : data?.id,
-      name : data?.name,
-      image : data?.image_path
-    })
+      teamId: data?.id,
+      name: data?.name,
+      image: data?.image_path
+    });
   };
 
   return (

@@ -133,19 +133,24 @@ export default function HighlightIndex() {
     data: finalData,
     rowCount: highlights?.data?.totalDocs as number,
     mantinePaginationProps: {
-      rowsPerPageOptions: ["10", "20", "50", "100"],
+      rowsPerPageOptions: ["10", "20", "50", "100", "200"],
       color: "rgb(56, 114, 250)",
       withEdges: true
     },
     manualPagination: true,
     onPaginationChange: setPagination,
     initialState: {
-      density: "xs"
+      density: "xs",
+      showGlobalFilter: true
     },
+    enableSorting: false,
+    autoResetPageIndex: false,
     enableDensityToggle: false,
-    state: { isLoading: finalDataLoading, showProgressBars: highlightsFetching, pagination },
-    enableSorting: true,
-    autoResetPageIndex: false
+    enableColumnFilters: false,
+    enableColumnActions: false,
+    enableColumnDragging: false,
+    enableToolbarInternalActions: false,
+    state: { isLoading: finalDataLoading, showProgressBars: highlightsFetching, pagination }
   });
 
   return (

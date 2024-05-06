@@ -37,7 +37,7 @@ function DropdownMenu() {
 
   return (
     <div className='w-64 text-left rtl:text-right'>
-      <div className='flex items-center border-b border-gray-300 px-6 pb-5 pt-6'>
+      <div className='flex items-center border-b border-gray-300 px-4 pb-3 pt-4'>
         <Avatar
           src='https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-11.webp'
           name='Albert Flores'
@@ -60,9 +60,9 @@ function DropdownMenu() {
           </Link>
         ))}
       </div>
-      <div className='border-t border-gray-300 px-3.5 pb-6 pt-5'>
+      <div className='border-t border-gray-300 p-2 pt-3'>
         <Button
-          className='h-auto w-full justify-start py-2 px-3.5 font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus-visible:ring-0'
+          className='h-auto w-full justify-center bg-gray-300 py-2 px-3.5 font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-100 hover:bg-red-400 focus-visible:ring-0'
           variant='text'
           onClick={() => handleLogout()}
         >
@@ -95,6 +95,7 @@ export default function ProfileMenu({
             name='Jane Doe'
             src='https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-11.webp'
             size='lg'
+            className='rounded-full'
           />
         </div>
       </Popover.Trigger>
