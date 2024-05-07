@@ -10,7 +10,7 @@ import { PiSpinnerLight } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import { PinCode } from "rizzui";
 
-export default function OtpModal({ phone }: { phone: string }) {
+export default function OtpModal({ email }: { email: string }) {
   const { replace } = useRouter();
   const dispatch = useDispatch();
   const [otp, setOtp] = useState<SetStateAction<string | number | undefined>>("");
@@ -94,7 +94,7 @@ export default function OtpModal({ phone }: { phone: string }) {
         setOtpValidMsg("Please, Enter Valid OTP!");
       } else {
         verifyPhone({
-          phone,
+          email,
           otp
         });
       }
@@ -108,7 +108,7 @@ export default function OtpModal({ phone }: { phone: string }) {
     setResendOtpSubmitting(true);
 
     resendOtp({
-      phone,
+      email,
       context: "verify_code"
     });
   };
@@ -120,7 +120,7 @@ export default function OtpModal({ phone }: { phone: string }) {
         <div className='py-4'>
           <div className='label mb-4'>
             <span className='text-sm font-semibold  '>
-              We sent an OTP to your phone (+{phone}). You have 2 minutes to complete this verification. Thank you!
+              We sent an OTP to your email ({email}). You have 2 minutes to complete this verification. Thank you!
             </span>
           </div>
           <form onSubmit={otpSubmitHandler}>

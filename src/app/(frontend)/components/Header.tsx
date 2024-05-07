@@ -113,7 +113,7 @@ export default function Header() {
                         <Dropdown.Item className='hover:bg-gray-900 hover:text-gray-50'>Support</Dropdown.Item>
                         <Dropdown.Item className='hover:bg-gray-900 hover:text-gray-50'>License</Dropdown.Item>
                       </div>
-                      <div className='mt-2 pt-2'>
+                      <div onClick={() => signOut()} className='mt-2 pt-2'>
                         <Dropdown.Item className='hover:bg-red-500 hover:text-gray-50'>Sign Out</Dropdown.Item>
                       </div>
                     </Dropdown.Menu>

@@ -17,7 +17,7 @@ export default async function Page({ params: { lang } }: { params: { lang: Local
     if (session?.user?.role === "admin") {
       redirect(routes.admin.dashboard);
     } else {
-      redirect(routes.home);
+      // redirect(routes.home);
     }
   }
 

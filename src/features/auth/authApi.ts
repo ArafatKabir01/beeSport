@@ -14,7 +14,7 @@ export const authApi = apiSlice.injectEndpoints({
     userRegister: builder.mutation({
       query: (data) => {
         return {
-          url: `/api/user/register`,
+          url: `/api/auth/signup`,
           method: "POST",
           body: data
         };
@@ -23,7 +23,7 @@ export const authApi = apiSlice.injectEndpoints({
     loginWithPhone: builder.mutation({
       query: (data) => {
         return {
-          url: `/api/user/login`,
+          url: `/api/auth/signin`,
           method: "POST",
           body: data
         };
@@ -32,7 +32,7 @@ export const authApi = apiSlice.injectEndpoints({
     verifyPhone: builder.mutation({
       query: (data) => {
         return {
-          url: `/api/user/verify-phone`,
+          url: `/api/auth/verify-otp`,
           method: "POST",
           body: data
         };
@@ -68,7 +68,7 @@ export const authApi = apiSlice.injectEndpoints({
     resendOtp: builder.mutation({
       query: (data) => {
         return {
-          url: `/api/user/resend-otp`,
+          url: `/api/auth/resend-otp`,
           method: "POST",
           body: data
         };
