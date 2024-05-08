@@ -5,7 +5,7 @@ export const bannerApi = apiSlice.injectEndpoints({
     addBanner: builder.mutation({
       query: (data) => {
         return {
-          url: "/api/admin/banner",
+          url: "/api/v2/admin/banners",
           method: "POST",
           body: data
         };
@@ -14,16 +14,17 @@ export const bannerApi = apiSlice.injectEndpoints({
     }),
 
     getAllBanner: builder.query({
-      query: () => "api/admin/banner",
+      query: () => "/api/v2/admin/banners",
       providesTags: ["allBanners"]
     }),
     getSingleBanner: builder.query({
-      query: (bannerId) => `api/admin/banner/${bannerId}`
+      query: (bannerId) => `/api/v2/admin/banners/${bannerId}`,
+      providesTags: ["allBanners"]
     }),
 
     deleteBanner: builder.mutation({
       query: (id) => ({
-        url: `/api/admin/banner/${id}`,
+        url: `/api/v2/admin/banners/${id}`,
         method: "DELETE"
       }),
       invalidatesTags: ["allBanners"]
@@ -31,7 +32,7 @@ export const bannerApi = apiSlice.injectEndpoints({
     updateBanner: builder.mutation({
       query: ({ id, data }) => {
         return {
-          url: `/api/admin/banner/${id}`,
+          url: `/api/v2/admin/banners/${id}`,
           method: "PUT",
           body: data
         };

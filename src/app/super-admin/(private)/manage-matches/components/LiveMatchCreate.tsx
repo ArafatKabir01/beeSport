@@ -1,8 +1,8 @@
 "use client";
 
 import { routes } from "@/config/routes";
-import { useCreateLiveMatchMutation, useGetLiveMatchesQuery } from "@/features/super-admin/live-match/liveMatchApi";
 import { useCreateFixtureMutation } from "@/features/super-admin/fixture/fixtureApi";
+import { useGetLiveMatchesQuery } from "@/features/super-admin/live-match/liveMatchApi";
 import { IFixtureSearchParams } from "@/types";
 import { generateRandomId } from "@/utils/generate-random-id";
 import getStreamObject from "@/utils/get-stream-object";
@@ -44,6 +44,7 @@ export default function LiveMatchCreate({ searchParams }: { searchParams: IFixtu
     match_title: searchParams?.match_title || "",
     time: searchParams?.time || "",
     is_hot: "0",
+    live_status: "0",
     sports_type_name: searchParams?.sports_type || "football",
     status: "1",
     team_one_name: searchParams?.t1_name || "",
@@ -101,7 +102,6 @@ export default function LiveMatchCreate({ searchParams }: { searchParams: IFixtu
           : values?.team_two_image
     };
 
-
     var formBody = new FormData();
 
     formBody.append("id", liveMatchData?.id);
@@ -126,7 +126,7 @@ export default function LiveMatchCreate({ searchParams }: { searchParams: IFixtu
       ? formBody.append("team_two_image", teamTwoImage)
       : formBody.append("team_two_image_url", liveMatchData?.team_two_image);
 
-      createFixture(formBody);
+    createFixture(formBody);
   };
 
   return (

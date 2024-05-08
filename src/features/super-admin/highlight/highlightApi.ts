@@ -3,17 +3,17 @@ import { apiSlice } from "@/features/api/apiSlice";
 export const highlightApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getHighlights: builder.query({
-      query: ({ page, limit }) => `/api/admin/highlights?page=${page}&limit=${limit}`,
+      query: ({ page, limit }) => `/api/v2/admin/highlights?page=${page}&limit=${limit}`,
       providesTags: ["highlights"]
     }),
     getHighlight: builder.query({
-      query: (id) => `/api/admin/highlights/${id}`,
+      query: (id) => `/api/v2/admin/highlights/${id}`,
       providesTags: (result, error, arg) => [{ type: "highlight", id: arg }]
     }),
     createHighlight: builder.mutation({
       query: (data) => {
         return {
-          url: "/api/admin/highlights/create",
+          url: "/api/v2/admin/highlights/create",
           method: "POST",
           body: data
         };
@@ -23,7 +23,7 @@ export const highlightApi = apiSlice.injectEndpoints({
     updateHighlight: builder.mutation({
       query: ({ id, data }) => {
         return {
-          url: `/api/admin/highlights/${id}`,
+          url: `/api/v2/admin/highlights/${id}`,
           method: "PUT",
           body: data
         };
@@ -33,7 +33,7 @@ export const highlightApi = apiSlice.injectEndpoints({
     deleteHighlight: builder.mutation({
       query: (id) => {
         return {
-          url: `/api/admin/highlights/${id}`,
+          url: `/api/v2/admin/highlights/${id}`,
           method: "DELETE"
         };
       },

@@ -26,7 +26,7 @@ export default function HighlightCreate({ searchParams }: { searchParams: any })
 
   const initialValues = {
     title: searchParams?.match_title || "",
-    date: searchParams?.time.slice(0, 10) || "",
+    date: searchParams?.time?.slice(0, 10) || "",
     fixtureId: searchParams?.fixture_id || "",
     videoType: "",
     youtubeUrl: "",

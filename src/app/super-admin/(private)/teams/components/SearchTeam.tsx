@@ -1,8 +1,4 @@
-import {
-  useAddPopularLeagueMutation,
-  useGetPopularLeaguesQuery,
-  useLeagueSearchQuery
-} from "@/features/super-admin/popular-league/popularLeagueApi";
+import { useAddTeamMutation, useGetTeamsQuery, useTeamSearchQuery } from "@/features/super-admin/teams/teamApi";
 import useDebounce from "@/hooks/use-debounce";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -13,28 +9,14 @@ import { PiListMagnifyingGlassLight } from "react-icons/pi";
 import { RxCross2 } from "react-icons/rx";
 import { ActionIcon, Input, Loader, Modal, Title } from "rizzui";
 
-export default function SearchFootballLeague({
-  isOpen,
-  setIsOpen
-}: {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-}) {
+export default function SearchTeam({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (value: boolean) => void }) {
   const [searchText, setSearchText] = useState("");
   const debounceText = useDebounce(searchText, 500);
   const [skip, setSkip] = useState(true);
-  const { data, isFetching } = useLeagueSearchQuery(debounceText, { skip });
+  const { data: searchTeams, isFetching } = useTeamSearchQuery(debounceText, { skip });
+  const { data: teams, isLoading: footballLeaguesLoading, refetch: footballLeagueRefetch } = useGetTeamsQuery({});
 
-  const {
-    data: footballLeagues,
-    isLoading: footballLeaguesLoading,
-    refetch: footballLeagueRefetch
-  } = useGetPopularLeaguesQuery(null);
-
-  const [
-    addFootballLeague,
-    { data: addFootballLeagueResponse, isSuccess: addFootballLeagueSuccess, isError: addFootballLeagueError }
-  ] = useAddPopularLeagueMutation();
+  const [addTeam, { data: addTeamResponse, isSuccess: addTeamSuccess, isError: addTeamError }] = useAddTeamMutation();
 
   useEffect(() => {
     if (debounceText.length >= 3) {
@@ -42,35 +24,32 @@ export default function SearchFootballLeague({
     } else {
       setSkip(true);
     }
-  }, [data, debounceText]);
+  }, [searchTeams, debounceText]);
 
   useEffect(() => {
-    if (addFootballLeagueError) {
-      toast.error("Something went wrong!");
+    if (addTeamError) {
+      toast.error("already have created team");
     }
 
-    if (addFootballLeagueSuccess) {
-      if (addFootballLeagueResponse?.status) {
-        toast.success("League Added Successfully!");
+    if (addTeamSuccess) {
+      if (addTeamResponse?.status) {
+        toast.success("Team Added Successfully!");
         footballLeagueRefetch();
       } else {
-        toast.error(addFootballLeagueResponse?.message || "Something went wrong!");
+        toast.error(addTeamResponse?.message || "Something went wrong!");
       }
     }
-  }, [addFootballLeagueError, addFootballLeagueResponse, addFootballLeagueSuccess, footballLeagueRefetch]);
+  }, [addTeamError, addTeamResponse, addTeamSuccess, footballLeagueRefetch]);
 
-  const selectedLeagueIds = footballLeagues?.data?.docs?.map((item: any) => item.id);
-  const suggestedLeagueData = data?.data?.filter((item: any) => !selectedLeagueIds?.includes(item?.id));
+  const selectedTeamIds = teams?.data?.map((item: any) => item.teamId);
+  const suggestedTeamData = searchTeams?.data?.filter((item: any) => !selectedTeamIds?.includes(item?.id));
 
   // Add Handler
   const handleLeagueData = (data: any) => {
-    addFootballLeague({
-      id: data?.id,
+    addTeam({
+      teamId: data?.id,
       name: data?.name,
-      image_path: data?.image_path,
-      country: data?.country?.name,
-      category: "football",
-      currentSeason: data?.currentseason?.id
+      image: data?.image_path
     });
   };
 
@@ -80,7 +59,7 @@ export default function SearchFootballLeague({
         <div className='mb-7 flex items-center justify-between'>
           <Title as='h3' className='flex items-center'>
             <PiListMagnifyingGlassLight className='text-2xl mr-1' />
-            Search & Add League
+            Search & Add Team
           </Title>
           <ActionIcon size='sm' variant='text' onClick={() => setIsOpen(false)} className='hover:text-error'>
             <BsXCircleFill className='text-2xl' />
@@ -93,11 +72,11 @@ export default function SearchFootballLeague({
             onChange={(e) => setSearchText(e.target.value)}
             prefix={<HiMiniMagnifyingGlass className='w-4 text-xl' />}
             suffix={<RxCross2 className='w-4 text-xl cursor-pointer' onClick={() => setSearchText("")} />}
-            placeholder='Premier League'
+            placeholder='Team'
           />
           <div className='h-64 overflow-y-auto'>
             <ul>
-              {suggestedLeagueData?.map((item: any) => (
+              {suggestedTeamData?.map((item: any) => (
                 <li key={item?.id} className='mb-3 rounded-md border border-slate-200 p-2'>
                   <div className='flex justify-between gap-2 items-center'>
                     <div className='flex items-center gap-2'>
@@ -121,9 +100,9 @@ export default function SearchFootballLeague({
                 </li>
               )}
 
-              {!data?.status && (
+              {!searchTeams?.status && (
                 <li className='mb-3 rounded-md border border-slate-200 p-2'>
-                  <div className='flex justify-center items-center'>No League Available!</div>
+                  <div className='flex justify-center items-center'>No Team Available!</div>
                 </li>
               )}
             </ul>
