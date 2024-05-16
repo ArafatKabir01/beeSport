@@ -11,7 +11,7 @@ export default function FootballFixtures() {
     return <h2>Loading...</h2>;
   }
 
-  const hotFixture = fixtureData.data.filter((data: any) => data.matchType === "hot");
+  const hotFixture = fixtureData?.data?.filter((data: any) => data.matchType === "hot");
 
   return (
     <div className='relative'>

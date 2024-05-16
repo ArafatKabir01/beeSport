@@ -5,7 +5,7 @@ export const authApi = apiSlice.injectEndpoints({
     adminLogin: builder.mutation({
       query: (data) => {
         return {
-          url: `/api/admin/login`,
+          url: `/api/v2/admin/auth/login`,
           method: "POST",
           body: data
         };
@@ -75,7 +75,7 @@ export const authApi = apiSlice.injectEndpoints({
       }
     }),
     getProfile: builder.query({
-      query: () => `/api/user/profile`,
+      query: () => `/api/auth/profile`,
       providesTags: ["userProfile"]
     }),
     addToUserFavorites: builder.mutation({

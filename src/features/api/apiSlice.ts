@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { RootState } from "../store";
+import { RootState } from "../store";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -7,6 +7,7 @@ export const apiSlice = createApi({
     baseUrl: process.env.NEXT_PUBLIC_MAHASCORE_BACKEND_URL as string,
     prepareHeaders: async (headers, { getState }) => {
       const token = (getState() as RootState).authSlice?.accessToken;
+      console.log("token", token);
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }

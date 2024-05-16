@@ -31,6 +31,7 @@ function DropdownMenu() {
       redirect: false,
       callbackUrl: routes.adminLogin
     });
+    localStorage.removeItem("accessToken");
 
     replace(routes.adminLogin);
   };

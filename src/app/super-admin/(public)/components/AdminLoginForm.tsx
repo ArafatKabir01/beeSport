@@ -38,6 +38,7 @@ export default function AdminLoginForm() {
 
     if (loginSuccess) {
       if (loginResponse?.status) {
+        localStorage?.setItem("accessToken", loginResponse?.data?.accessToken);
         dispatch(
           userLoggedIn({
             accessToken: loginResponse?.data?.accessToken,

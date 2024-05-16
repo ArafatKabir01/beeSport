@@ -34,6 +34,7 @@ export default function OtpModal({ email }: { email: string }) {
         setOtpSubmitting(false);
         setOtpValidMsg(responseData?.message);
       } else {
+        localStorage.setItem("accessToken", responseData?.data?.accessToken);
         dispatch(
           userLoggedIn({
             accessToken: responseData?.data?.accessToken,
