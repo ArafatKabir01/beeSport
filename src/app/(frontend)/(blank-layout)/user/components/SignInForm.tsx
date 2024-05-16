@@ -47,6 +47,7 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
     try {
       setSocialLoginLoading(true);
       await signIn("google");
+
       setSocialLoginLoading(false);
     } catch (error) {
       console.error("Error during Google sign-in:", error);
@@ -86,6 +87,7 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
 
     if (loginSuccess) {
       if (loginResponse?.status) {
+        localStorage.setItem("accessToken", loginResponse?.data?.accessToken);
         dispatch(
           userLoggedIn({
             accessToken: loginResponse?.data?.accessToken,

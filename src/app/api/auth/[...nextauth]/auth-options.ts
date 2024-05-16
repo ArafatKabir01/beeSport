@@ -37,6 +37,7 @@ export const authOptions: NextAuthOptions = {
           provider: account?.provider
         };
         const { data } = await mahaScoreBackendUrl.post("/api/auth/signup", values);
+
         const userData = data?.data;
 
         if (userData) {

@@ -1,3 +1,4 @@
+import Wrapper from "@/components/Wrapper";
 import BannerSlider from "../../components/BannerSlider";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
@@ -23,7 +24,7 @@ export default async function ThreeColumnsLayout({ children }: { children: React
               <div className='mb-3 mt-3'>
                 <BannerSlider />
               </div>
-              {children}
+              <Wrapper>{children}</Wrapper>
             </div>
           </div>
         </div>

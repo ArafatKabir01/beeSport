@@ -23,7 +23,12 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} isLinkBtn={false} />
+      <PageHeader
+        title={pageHeader.title}
+        breadcrumb={pageHeader.breadcrumb}
+        isLinkBtnText={"Add User"}
+        isLinkBtn={false}
+      />
       <ManageUserIndex />
     </>
   );
