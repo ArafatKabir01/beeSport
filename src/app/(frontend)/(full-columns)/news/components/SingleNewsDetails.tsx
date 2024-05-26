@@ -36,7 +36,7 @@ export default function SingleNewsDetails({ newsSlug }: { newsSlug: string }) {
               alt='HighlightImg'
               width={0}
               height={0}
-              className='aspect-[16/8] h-full w-full object-cover py-[4px]'
+              className='aspect-[16/9] h-full w-full object-fit '
               sizes='100vw'
             />
           </figure>

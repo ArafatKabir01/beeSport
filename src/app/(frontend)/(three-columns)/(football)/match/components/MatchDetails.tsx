@@ -1,5 +1,6 @@
 "use client";
 
+import AuthModal from "@/app/(frontend)/(blank-layout)/user/components/AuthModal";
 import Countdown from "@/app/(frontend)/components/Countdown";
 import FixtureCard from "@/app/(frontend)/components/FixtureCard";
 import VideoPlayer from "@/app/(frontend)/components/VideoPlayer";
@@ -12,25 +13,29 @@ import {
 import { RootState } from "@/features/store";
 
 import { IFixtureProps } from "@/types";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtureProps) {
   const { accessToken } = useSelector((state: RootState) => state.authSlice);
+  const { data: session } = useSession();
   const { data: liveMatch, isLoading: streamSourcesLoading } = useGetFixtureLiveIdQuery(fixtureId) as any;
+  const [modalState, setModalState] = useState<boolean>(false);
 
-  const streamSources = liveMatch?.data?.streaming_sources;
   const formatDate = (timestamp: any) => new Date(timestamp * 1000);
   const isWithin15MinutesBeforeMatch = (timestamp: any) => {
     const fifteenMinutesBeforeMatch = new Date(formatDate(timestamp));
     fifteenMinutesBeforeMatch.setMinutes(fifteenMinutesBeforeMatch.getMinutes() - 15);
     return new Date() >= fifteenMinutesBeforeMatch;
   };
-  const liveMatchStatus = isWithin15MinutesBeforeMatch(liveMatch?.data?.match_time);
-  const { isLoading, data: fixtureData } = useGetFixtureDataQuery(undefined);
 
   const { isLoading: fixtureLoading, data: fixtureDataById } = useGetFixtureDatabyIdQuery(fixtureId);
+  const { isLoading, data: fixtureData } = useGetFixtureDataQuery(undefined);
 
+  const streamSources = fixtureDataById?.data?.streaming_sources;
+  const liveMatchStatus = isWithin15MinutesBeforeMatch(fixtureDataById?.data?.startingAt);
+  console.log("liveMatchStatus", liveMatchStatus);
   if (isLoading || fixtureLoading) {
     return <h2>Loading...</h2>;
   }
@@ -42,11 +47,11 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
         <div className='w-full bg-[#1B2435] '></div>
       </div>
 
-      {liveMatch?.status && (
+      {!liveMatch?.status && (
         <div>
-          {accessToken ? (
+          {session ? (
             <div>
-              {liveMatchStatus ? (
+              {!liveMatchStatus ? (
                 <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
               ) : (
                 <div className='my-5 flex justify-center'>
@@ -63,7 +68,7 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
                     <div className='hero-overlay bg-black bg-opacity-50 blur-md'></div>
 
                     <Countdown date={liveMatch?.data?.match_time} className='text-xl   absolute top-[10rem]' />
-                    <h2 className='absolute top-[12rem] text-center text-lg font-bold  '>
+                    <h2 className='absolute top-[12rem] text-center text-lg font-bold text-white '>
                       Streaming will start before 15 mins of the match started
                     </h2>
                   </div>
@@ -86,25 +91,25 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
                   <div className='hero-overlay bg-black bg-opacity-50 blur-md'></div>
 
                   <Countdown date={liveMatch?.data?.match_time} />
-                  <h2 className='absolute top-[7rem] text-center text-lg font-bold  '>
+                  <h2 className='absolute top-[7rem] text-center text-lg font-bold  text-white'>
                     You must sign up or login to watch livestreams.
                   </h2>
                   <div className='absolute z-10 mx-auto'>
                     <div className='mb-2'>
-                      <Link
-                        href={"/user/signup"}
-                        className='btn btn-neutral btn-active btn-wide bg-primary hover:bg-[#1B2435]'
+                      <div
+                        onClick={() => setModalState(true)}
+                        className='btn btn-neutral bg-[#EE1E46] btn-active btn-wide text-white hover:bg-[#1B2435]'
                       >
                         SignUp
-                      </Link>
+                      </div>
                     </div>
                     <div>
-                      <Link
-                        href={"/user/signin"}
+                      <div
+                        onClick={() => setModalState(true)}
                         className='btn btn-outline btn-active btn-wide border-primary hover:bg-[#1B2435]'
                       >
                         Login
-                      </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -158,6 +163,7 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
           {hotFixture?.map((fixture: any) => <FixtureCard key={fixture?.id} fixture={fixture} />)}
         </div>
       </div>
+      <AuthModal modalState={modalState} setModalState={setModalState} />
     </div>
   );
 }

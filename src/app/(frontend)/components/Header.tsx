@@ -102,18 +102,18 @@ export default function Header() {
                           name={session?.user?.name ? session?.user?.name : "efdf"}
                           // src='https://randomuser.me/api/portraits/women/40.jpg'
                           initials={session?.user?.name?.slice(0, 2).toUpperCase()}
-                          className='cursor-pointer rounded-full'
+                          className='cursor-pointer rounded-full '
                           color='info'
                           size='sm'
                         />
                       </Dropdown.Trigger>
-                      <Dropdown.Menu className='w-56 divide-y text-gray-600'>
+                      <Dropdown.Menu className='w-64 divide-y text-gray-600'>
                         <Dropdown.Item className='hover:bg-transparent'>
                           <Avatar
                             name={session?.user?.name ? session?.user?.name : "df"}
                             initials={session?.user?.name?.slice(0, 2).toUpperCase()}
                             // src='https://randomuser.me/api/portraits/women/40.jpg'
-                            className='rounded-full'
+                            className='rounded-full '
                             color='info'
                             size='sm'
                           />
@@ -136,7 +136,7 @@ export default function Header() {
                     </Dropdown>
                   </div>
                 ) : (
-                  <div className='col-span-6 justify-self-end  flex gap-3'>
+                  <div className='col-span-6 justify-self-end text-lg border border-red-600 p-2 flex gap-3'>
                     <div
                       className={`${
                         pathname === routes.signIn ? "border-b-2 border-[#EE1E46]" : " hover:text-slate-300"

@@ -44,6 +44,7 @@ export default async function RootLayout({
         strategy='afterInteractive'
         src='https://cdn.jwplayer.com/libraries/XhGm52Nv.js'
       ></Script>
+
       <body
         // to prevent any warning that is caused by third party extensions like Grammarly
         suppressHydrationWarning

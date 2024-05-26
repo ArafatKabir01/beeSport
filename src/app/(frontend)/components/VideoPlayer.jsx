@@ -2,7 +2,8 @@
 
 import JWPlayer from "@jwplayer/jwplayer-react";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "rizzui";
 
 const formatDate = (timestamp) => new Date(timestamp * 1000);
@@ -14,10 +15,12 @@ const isWithin15MinutesBeforeMatch = (timestamp) => {
 
 export default function VideoPlayer({ streamSources, fixtureId }) {
   const { data: session } = useSession();
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isRender, setIsRender] = useState(false);
   const [currentStreamIndex, setCurrentStreamIndex] = useState(0);
-  const [isLive, setIsLive] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
+  const timerRef = useRef(null); // Ref to manage the timer
+  const popupTimerRef = useRef(null); // Ref to manage popup visibility timer
   const videoUrls = streamSources?.map((source) => source?.stream_url) || [];
 
   const handleStreamButtonClick = async (index) => {
@@ -28,11 +31,34 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
     setIsRender(true);
   }, []);
 
+  const startPopupTimer = () => {
+    timerRef.current = setInterval(() => {
+      setShowPopup(true);
+      popupTimerRef.current = setTimeout(() => {
+        setShowPopup(false);
+      }, 3000); // Hide popup after 3 seconds
+    }, 10000); // Show popup every 10 seconds
+  };
+
+  useEffect(() => {
+    if (isVideoPlaying) {
+      startPopupTimer();
+    } else {
+      clearInterval(timerRef.current);
+      clearTimeout(popupTimerRef.current);
+    }
+
+    return () => {
+      clearInterval(timerRef.current);
+      clearTimeout(popupTimerRef.current);
+    };
+  }, [isVideoPlaying]);
+
   return (
     <>
-      {videoUrls ? (
+      {videoUrls.length > 0 && (
         <>
-          <div className='relative  aspect-video w-full border border-gray-800 bg-black p-0'>
+          <div className='relative aspect-video w-full border border-gray-800 bg-black p-0'>
             {isRender && (
               <JWPlayer
                 key={`stream-${currentStreamIndex}-${fixtureId}`}
@@ -48,54 +74,35 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
                     }
                   });
                 }}
-                playlist={[{ sources: [{ file: videoUrls[currentStreamIndex] }] }]}
+                playlist={[
+                  {
+                    sources: [{ file: videoUrls[currentStreamIndex] }]
+                  }
+                ]}
                 autostart={true}
                 logo={null}
-                controls={false}
+                controls={!showPopup} // Hide controls when the popup is shown
               />
             )}
-            <div className='flex justify-center items-center w-[900px] h-[500px] bg-black absolute top-[40px] left-[4rem] bottom-0 z-50 bg-opacity-90'>
-              <div className=' text-center w-[500px]'>
-                <h2 className='text-3xl font-bold text-[#EE1E46] mb-5'>YOUR TRIAL HAS EXPIRED!</h2>
-                <p className='text-white mb-3'>
-                  Upgrade your account now to continue enjoying exclusive sports content and never miss a moment of the
-                  action!
-                </p>
-                <Button className='text-white bg-[#EE1E46]'>Update Your Plan</Button>
+            {showPopup && (
+              <div className='flex justify-center items-center w-full h-full bg-black absolute top-0 left-0 z-50 bg-opacity-90'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold text-[#EE1E46] mb-5'>Your Trial Has Expired!</h2>
+                  <p className='text-white mb-3'>
+                    Upgrade your account now to continue enjoying exclusive sports content and never miss a moment of
+                    the action!
+                  </p>
+                  <Link href='/pricing'>
+                    <Button className='text-white bg-[#EE1E46]'>Update Your Plan</Button>
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
-          <div className='mb-5 mt-5 flex flex-col items-start justify-between px-1 lg:px-4'>
-            {/* <div className='flex flex-wrap gap-1 lg:gap-4'>
-              {streamSources?.map((stream, index) => (
-                <button
-                  key={index}
-                  className={`btn btn-xs rounded-full lg:btn-sm
-              ${
-                currentStreamIndex === index
-                  ? `btn-primary shadow-lg shadow-blue-900`
-                  : `btn-outline ${
-                      stream?.is_premium == 1 ? "btn-warning shadow-md shadow-yellow-300" : "btn-neutral"
-                    }   `
-              }`}
-                  onClick={() => handleStreamButtonClick(index)}
-                >
-                  {stream?.is_premium == 1 && (
-                    <span>
-                      <IoDiamondOutline />
-                    </span>
-                  )}
-                  <span>{stream?.stream_title} </span>
-                </button>
-              ))}
-            </div> */}
-          </div>
+          <div className='mb-5 mt-5 flex flex-col items-start justify-between px-1 lg:px-4'></div>
         </>
-      ) : (
-        <></>
       )}
-      {/* <DownloadAppClick /> */}
     </>
   );
 }
