@@ -1,0 +1,134 @@
+/* General Styling for the Match Card */
+.match-card {
+  background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1sPwwvtiTi4t9x-GwkensLXJOZK8S4FBo3g&usqp=CAU")
+    no-repeat center center;
+  background-size: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 1200px;
+  height: 200px; /* Adjusted height */
+  margin: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.match-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Overlay to Darken Background */
+.overlay {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+/* Teams Section */
+.teams {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  animation: fadeInUp 0.5s ease-in-out;
+}
+
+.team {
+  text-align: center;
+}
+
+.team-logo {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.team-logo:hover {
+  transform: scale(1.1);
+}
+
+.team-name {
+  font-weight: bold;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  color: #fff;
+}
+
+/* VS Text */
+.vs-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff4b5c;
+  animation: pulse 2s infinite;
+}
+
+/* Match Details Section with Glassy Effect */
+.match-details {
+  background: rgba(255, 235, 59, 0.5); /* Semi-transparent yellow */
+  backdrop-filter: blur(10px); /* Glassy effect */
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: slideInUp 0.5s ease-in-out;
+  text-align: center;
+  width: 90%;
+}
+
+.match-date {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #1a237e;
+}
+
+.match-time {
+  font-size: 0.7rem;
+  color: #333;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -6,6 +6,7 @@ interface CountdownProps {
 }
 
 export default function Countdown({ date, className = "" }: CountdownProps) {
+  console.log("date", date);
   const timestamp = date;
   const [count, setCount] = useState<string | null>(null);
   const [loader, setLoader] = useState<boolean>(true);

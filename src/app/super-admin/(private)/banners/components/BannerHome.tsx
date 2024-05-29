@@ -1,6 +1,5 @@
 "use client";
 
-import { useGetAllNewsQuery } from "@/features/super-admin/news/newsApi";
 import { useGetAllBannerQuery } from "@/features/super-admin/banner/bannerApi";
 import { ColorScheme, MantineProvider, useMantineTheme } from "@mantine/core";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
@@ -20,8 +19,6 @@ export default function BannerHome() {
   const [finalData, setFinalData] = useState([]);
   const { data: bannerData, isLoading, isError, isFetching, isSuccess } = useGetAllBannerQuery(undefined);
   const [deleteModalState, setDeleteModalState] = useState(false);
-
-
 
   useEffect(() => {
     if (!isLoading && !isError) {
@@ -43,7 +40,7 @@ export default function BannerHome() {
         Cell: ({ row }: { row: { original: { image: string; title: string } } }) => (
           <div className=''>
             <span className='ml-2'>
-              {row?.original?.title.length > 25 ? `${row?.original?.title.substring(0, 25)}...` : row?.original?.title}
+              {row?.original?.title?.length > 25 ? `${row?.original?.title.substring(0, 25)}...` : row?.original?.title}
             </span>
           </div>
         )
@@ -60,7 +57,7 @@ export default function BannerHome() {
       {
         accessorKey: "fixtureId",
         header: "FixtureId",
-        id : "fixtureId"
+        id: "fixtureId"
       },
       {
         id: "edit",

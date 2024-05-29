@@ -4,11 +4,7 @@ import AuthModal from "@/app/(frontend)/(blank-layout)/user/components/AuthModal
 import Countdown from "@/app/(frontend)/components/Countdown";
 import FixtureCard from "@/app/(frontend)/components/FixtureCard";
 import VideoPlayer from "@/app/(frontend)/components/VideoPlayer";
-import {
-  useGetFixtureDataQuery,
-  useGetFixtureDatabyIdQuery,
-  useGetFixtureLiveIdQuery
-} from "@/features/front-end/fixture/fixtureApi";
+import { useGetFixtureDataQuery, useGetFixtureDatabyIdQuery } from "@/features/front-end/fixture/fixtureApi";
 
 import { RootState } from "@/features/store";
 
@@ -20,12 +16,12 @@ import { useSelector } from "react-redux";
 export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtureProps) {
   const { accessToken } = useSelector((state: RootState) => state.authSlice);
   const { data: session } = useSession();
-  const { data: liveMatch, isLoading: streamSourcesLoading } = useGetFixtureLiveIdQuery(fixtureId) as any;
   const [modalState, setModalState] = useState<boolean>(false);
 
   const formatDate = (timestamp: any) => new Date(timestamp * 1000);
   const isWithin15MinutesBeforeMatch = (timestamp: any) => {
     const fifteenMinutesBeforeMatch = new Date(formatDate(timestamp));
+    console.log("fifteenMinutesBeforeMatch", fifteenMinutesBeforeMatch);
     fifteenMinutesBeforeMatch.setMinutes(fifteenMinutesBeforeMatch.getMinutes() - 15);
     return new Date() >= fifteenMinutesBeforeMatch;
   };
@@ -34,8 +30,9 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
   const { isLoading, data: fixtureData } = useGetFixtureDataQuery(undefined);
 
   const streamSources = fixtureDataById?.data?.streaming_sources;
-  const liveMatchStatus = isWithin15MinutesBeforeMatch(fixtureDataById?.data?.startingAt);
+  const liveMatchStatus = isWithin15MinutesBeforeMatch(fixtureDataById?.data?.starting_at_timestamp);
   console.log("liveMatchStatus", liveMatchStatus);
+
   if (isLoading || fixtureLoading) {
     return <h2>Loading...</h2>;
   }
@@ -47,35 +44,37 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
         <div className='w-full bg-[#1B2435] '></div>
       </div>
 
-      {!liveMatch?.status && (
+      {fixtureDataById?.data?.status === "1" && (
         <div>
-          {session ? (
-            <div>
-              {!liveMatchStatus ? (
-                <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
-              ) : (
-                <div className='my-5 flex justify-center'>
-                  <div
-                    style={{
-                      backgroundImage: "url(/images/wallpaperflare.com_wallpaper.jpg)",
-                      backgroundRepeat: "no-repeat",
-                      backgroundSize: "cover", // Adjust the background size as needed
-                      position: "relative",
-                      content: "fit"
-                    }}
-                    className='flex h-[400px] w-full flex-col items-center justify-center '
-                  >
-                    <div className='hero-overlay bg-black bg-opacity-50 blur-md'></div>
+          <div>
+            {!liveMatchStatus ? (
+              <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
+            ) : (
+              <div className='my-5 flex justify-center'>
+                <div
+                  style={{
+                    backgroundImage: "url(/images/wallpaperflare.com_wallpaper.jpg)",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover", // Adjust the background size as needed
+                    position: "relative",
+                    content: "fit"
+                  }}
+                  className='flex h-[400px] w-full flex-col items-center justify-center '
+                >
+                  <div className='hero-overlay bg-black bg-opacity-50 blur-md'></div>
 
-                    <Countdown date={liveMatch?.data?.match_time} className='text-xl   absolute top-[10rem]' />
-                    <h2 className='absolute top-[12rem] text-center text-lg font-bold text-white '>
-                      Streaming will start before 15 mins of the match started
-                    </h2>
-                  </div>
+                  <Countdown
+                    date={fixtureDataById?.data?.starting_at_timestamp}
+                    className='text-xl   absolute top-[10rem]'
+                  />
+                  <h2 className='absolute top-[12rem] text-center text-lg font-bold text-white '>
+                    Streaming will start before 15 mins of the match started
+                  </h2>
                 </div>
-              )}
-            </div>
-          ) : (
+              </div>
+            )}
+          </div>
+          {/* ) : (
             <>
               <div className='my-5 flex justify-center'>
                 <div
@@ -114,8 +113,7 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
                   </div>
                 </div>
               </div>
-            </>
-          )}
+            </> */}
         </div>
       )}
       {/* {<HighlightMatch fixtureId={fixtureId} />} */}

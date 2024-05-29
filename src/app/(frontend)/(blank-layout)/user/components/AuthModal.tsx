@@ -130,7 +130,7 @@ export default function AuthModal({ modalState, setModalState }: { modalState: b
         toast.error(loginResponse?.message);
       }
     }
-  }, [loginError, loginSuccess, loginResponse, replace, dispatch]);
+  }, [loginError, loginSuccess, loginResponse, replace, dispatch, setModalState]);
 
   // Submit Handler
   const signInHandler = (e: React.FormEvent) => {
