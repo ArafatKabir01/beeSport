@@ -14,6 +14,7 @@ import TabButtonItem from "../../components/TabButtonItem";
 import CloudinaryForm from "./CloudinaryForm";
 import GeneralSettingsForm from "./GeneralSettingsForm";
 import LogoAndIconForm from "./LogoAndIconForm";
+import { PopupTime } from "./PopupTime";
 import PrivacyAndPolicyForm from "./PrivacyAndPolicyForm";
 import SocialLinksForm from "./SocialLinksForm";
 import TermsAndConditionForm from "./TermsAndConditionForm";
@@ -47,7 +48,13 @@ export default function SettingsMainForm() {
     cloudinaryApiKey: "",
     cloudinaryAppSecret: "",
     android_download_link: "",
-    ios_download_link: ""
+    ios_download_link: "",
+    GUEST_POPUP_INTERVAL: 10000,
+    GUEST_POPUP_DURATION: 5000,
+    GUEST_FREE_WATCH_LIMIT: 300,
+    Login_POPUP_INTERVAL: 20000,
+    Login_POPUP_DURATION: 5000,
+    Login_FREE_WATCH_LIMIT: 300
   });
 
   useEffect(() => {
@@ -81,6 +88,7 @@ export default function SettingsMainForm() {
     "General Settings",
     "Apps & Social Links",
     "Logo & Icon",
+    "Video Popup Time",
     "Terms and Condition",
     "Privacy and Policy",
     "Cloudinary"
@@ -101,6 +109,7 @@ export default function SettingsMainForm() {
 
   // Submit Handler
   const handleSubmit = async (values: any) => {
+    console.log("values", values);
     setIsSubmitting(true);
 
     var formBody = new FormData();
@@ -122,7 +131,13 @@ export default function SettingsMainForm() {
       "cloudinaryApiKey",
       "cloudinaryAppSecret",
       "qpsms_appkey",
-      "qpsms_secretkey"
+      "qpsms_secretkey",
+      "GUEST_POPUP_INTERVAL",
+      "GUEST_POPUP_DURATION",
+      "GUEST_FREE_WATCH_LIMIT",
+      "Login_POPUP_INTERVAL",
+      "Login_POPUP_DURATION",
+      "Login_FREE_WATCH_LIMIT"
     ];
 
     fieldsToAppend.forEach((field) => {
@@ -183,14 +198,20 @@ export default function SettingsMainForm() {
                 </div>
 
                 <div hidden={currentTab === 3 ? false : true}>
+                  <PopupTime values={values} setFieldValue={setFieldValue} />
+                </div>
+                <div hidden={currentTab === 4 ? false : true}>
                   <TermsAndConditionForm values={values} setFieldValue={setFieldValue} />
                 </div>
+                <div hidden={currentTab === 5 ? false : true}>
+                  <PopupTime values={values} setFieldValue={setFieldValue} />
+                </div>
 
-                <div hidden={currentTab === 4 ? false : true}>
+                <div hidden={currentTab === 6 ? false : true}>
                   <PrivacyAndPolicyForm values={values} setFieldValue={setFieldValue} />
                 </div>
 
-                <div hidden={currentTab === 5 ? false : true}>
+                <div hidden={currentTab === 7 ? false : true}>
                   <CloudinaryForm />
                 </div>
               </div>

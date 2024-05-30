@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetSettingInfoQuery } from "@/features/front-end/settings/settingsApi";
 import JWPlayer from "@jwplayer/jwplayer-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -7,13 +8,13 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "rizzui";
 // Constants for pop-up timing
-const GUEST_POPUP_INTERVAL = 20000; // 20 seconds
-const GUEST_POPUP_DURATION = 5000; // 5 seconds
-const GUEST_FREE_WATCH_LIMIT = 300; // 5 minutes (300 seconds)
+// const GUEST_POPUP_INTERVAL = 20000; // 20 seconds
+// const GUEST_POPUP_DURATION = 10000; // 5 seconds
+// const GUEST_FREE_WATCH_LIMIT = 300; // 5 minutes (300 seconds)
 
-const LOGGED_IN_POPUP_INTERVAL = 10000; // 30 seconds
-const LOGGED_IN_POPUP_DURATION = 5000; // 10 seconds
-const LOGGED_IN_FREE_WATCH_LIMIT = 60; // 1 minute (60 seconds)
+// const LOGGED_IN_POPUP_INTERVAL = 10000; // 30 seconds
+// const LOGGED_IN_POPUP_DURATION = 5000; // 10 seconds
+// const LOGGED_IN_FREE_WATCH_LIMIT = 60; // 1 minute (60 seconds)
 
 const formatDate = (timestamp) => new Date(timestamp * 1000);
 const isWithin15MinutesBeforeMatch = (timestamp) => {
@@ -38,10 +39,11 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
   const watchTimeIntervalRef = useRef(null);
   const countdownIntervalRef = useRef(null);
   const videoUrls = streamSources?.map((source) => source?.stream_url) || [];
+  const { data: settingInfo, isLoading: settingInfoLoading } = useGetSettingInfoQuery(undefined);
   const handleStreamButtonClick = async (index) => {
     setCurrentStreamIndex(index);
   };
-
+  console.log("settingInfo", settingInfo?.generalSetting[0].GUEST_FREE_WATCH_LIMIT);
   useEffect(() => {
     setIsRender(true);
   }, []);
@@ -56,6 +58,15 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
     }, interval); // Show popup at specified interval
   };
 
+  // Constants for pop-up timing
+  const GUEST_POPUP_INTERVAL = settingInfo?.generalSetting[0]?.GUEST_POPUP_INTERVAL; // 20 seconds
+  const GUEST_POPUP_DURATION = settingInfo?.generalSetting[0]?.GUEST_POPUP_DURATION; // 5 seconds
+  const GUEST_FREE_WATCH_LIMIT = settingInfo?.generalSetting[0]?.GUEST_FREE_WATCH_LIMIT; // 5 minutes (300 seconds)
+
+  const LOGGED_IN_POPUP_INTERVAL = settingInfo?.generalSetting[0]?.Login_POPUP_INTERVAL; // 30 seconds
+  const LOGGED_IN_POPUP_DURATION = settingInfo?.generalSetting[0]?.Login_POPUP_DURATION; // 10 seconds
+  const LOGGED_IN_FREE_WATCH_LIMIT = settingInfo?.generalSetting[0]?.Login_FREE_WATCH_LIMIT; // 1 minute (60 seconds)
+
   useEffect(() => {
     const isLoggedIn = session?.user != null;
     const hasSubscription = session?.user?.subscription != null;
@@ -68,7 +79,7 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
     const popupDuration = isLoggedIn ? LOGGED_IN_POPUP_DURATION : GUEST_POPUP_DURATION;
     const freeWatchLimit = isLoggedIn ? LOGGED_IN_FREE_WATCH_LIMIT : GUEST_FREE_WATCH_LIMIT;
 
-    if (isVideoPlaying) {
+    if (isVideoPlaying && !settingInfoLoading) {
       startPopupTimer(popupInterval, popupDuration);
       watchTimeIntervalRef.current = setInterval(() => {
         setTotalWatchTime((prevTime) => {
@@ -94,7 +105,7 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
       clearTimeout(popupTimerRef.current);
       clearInterval(watchTimeIntervalRef.current);
     };
-  }, [isVideoPlaying, session]);
+  }, [isVideoPlaying, session, settingInfoLoading]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -123,10 +134,7 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
       {videoUrls.length > 0 && (
         <>
           <div className='relative aspect-video w-full border border-gray-800 bg-black p-0'>
-            <div
-              onClick={handleFullScreen}
-              className='absolute bottom-2 right-4 z-20 rounded h-8 w-10 cursor-pointer'
-            ></div>
+            <div onClick={handleFullScreen} className='absolute bottom-0 right-3 z-20 h-11 w-11 cursor-pointer'></div>
             {isRender && (
               <JWPlayer
                 key={`stream-${currentStreamIndex}-${fixtureId}`}
