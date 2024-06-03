@@ -3,7 +3,7 @@ import { apiSlice } from "@/features/api/apiSlice";
 export const liveMatchApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getLiveMatches: builder.query({
-      query: ({ page, limit }) => `/api/admin/matches?page=${page}&limit=${limit}`,
+      query: ({ page, limit }) => `/api/v2/admin/fixtures?page=${page}&limit=${limit}`,
       providesTags: ["liveMatches"]
     }),
     getLiveMatch: builder.query({
