@@ -2,7 +2,7 @@ import Countdown from "./Countdown";
 
 export default function LiveMatchPreviewInfo({ match }: any) {
   return (
-    <div className='relative mt-5 h-[50vh] sm:h-[65vh]'>
+    <div className='relative mt-5 h-[50vh] sm:h-[65vh] mb-5'>
       <img src='/images/stadium.jpg' alt='logo' className='w-full h-full bg-primary' />
       <div className='absolute inset-0 backdrop-blur-sm'>
         <div className='flex flex-col items-center justify-center px-8 h-full gap-5 text-gray-800'>

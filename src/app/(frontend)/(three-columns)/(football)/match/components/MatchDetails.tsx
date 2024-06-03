@@ -47,7 +47,7 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
       {fixtureDataById?.data?.status === "1" && (
         <div>
           <div>
-            {liveMatchStatus ? (
+            {!liveMatchStatus ? (
               // <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
               <SelectedLiveMatch match={streamSources} />
             ) : (
@@ -120,7 +120,7 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
       {/* {<HighlightMatch fixtureId={fixtureId} />} */}
       <div
         // style={{ background: "linear-gradient(to bottom right, black 42%, #EE1E46 62%)" }}
-        className='p-3 bg-cover bg-[#FFFFFF] rounded-md mb-3'
+        className='p-3 bg-cover bg-[#FFFFFF] rounded-md mb-3 mt-10'
       >
         <div className='grid grid-cols-12 justify-items-center items-center my-3 '>
           <div className='col-span-4 flex flex-col items-center justify-center'>

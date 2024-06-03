@@ -5,8 +5,8 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-// import GlobalLoading from "@/components/Global/GlobalLoading";
-
+import { useGetSettingInfoQuery } from "@/features/front-end/settings/settingsApi";
+import { useGuestUserDataMutation, useUserDataMutation } from "@/features/front-end/settings/userSetting";
 import LiveMatchPreviewInfo from "./LiveMatchPreviewInfo";
 import ShowPopUps from "./ShowPopUps";
 import StreamChangeButtons from "./StreamChangeButtons";
@@ -27,24 +27,28 @@ const SelectedLiveMatch = ({ match }) => {
   const [blockVideoPlayer, setBlockVideoPlayer] = useState(false);
   const [watchTime, setWatchTime] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  console.log("match", match);
+  const { data: settingInfo } = useGetSettingInfoQuery(undefined);
+  const [userData] = useUserDataMutation(undefined);
+  const [guestUserData] = useGuestUserDataMutation(undefined);
+
   const isLive = isWithin15MinutesBeforeMatch(match?.starting_at_timestamp);
-  // const { streamSettings, isLoading: isLoadingStreamSettings } = useGetStreamSettings();
+
+  const GUEST_POPUP_INTERVAL = settingInfo?.generalSetting[0]?.GUEST_POPUP_INTERVAL;
+  const GUEST_POPUP_DURATION = settingInfo?.generalSetting[0]?.GUEST_POPUP_DURATION;
+
+  const LOGGED_IN_POPUP_INTERVAL = settingInfo?.generalSetting[0]?.Login_POPUP_INTERVAL;
+  const LOGGED_IN_POPUP_DURATION = settingInfo?.generalSetting[0]?.Login_POPUP_DURATION;
 
   const streamingSources = match?.streaming_sources || [];
   const videoUrls = streamingSources.map((source) => source?.stream_url);
 
-  const handleLoginUserWatchTime = async (minutesWatched, index) => {
+  const handleLoginUserWatchTime = async (minutesWatched, index = 0) => {
     if (!session) return;
 
     const isPremium = streamingSources[index]?.is_premium;
 
     try {
-      const { data } = await apiBaseUrl.put("/api/user/watch-time", {
-        email: session.email,
-        minutes_watched: minutesWatched
-      });
-
+      const { data } = await userData({ email: session?.user?.email, minutes_watched: minutesWatched });
       const user = data?.data;
       const isPaid = user?.role === "paid";
 
@@ -52,42 +56,46 @@ const SelectedLiveMatch = ({ match }) => {
         setIsPaidUser(isPaid);
       } else if (isPremium) {
         setBlockVideoPlayer(user?.is_blocked);
+        if (user?.is_blocked) {
+          localStorage.removeItem("watchTime");
+        }
       } else {
         setBlockVideoPlayer(false);
       }
 
-      setWatchTime(user?.minutes_watched);
-      localStorage.setItem("watchTime", user?.minutes_watched);
+      if (!user?.is_blocked) localStorage.setItem("watchTime", user?.minutes_watched);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleGuestUserWatchTime = async (minutesWatched, index) => {
+  const handleGuestUserWatchTime = async (minutesWatched, index = 0) => {
     if (session) return;
 
     const isPremium = streamingSources[index]?.is_premium;
 
     try {
-      const { data } = await apiBaseUrl.put("/api/black-list/update", {
-        minutes_watched: minutesWatched
-      });
+      const { data } = await guestUserData({ minutes_watched: minutesWatched });
 
       const isBlocked = data?.data?.is_blocked;
       if (isPremium) {
         setBlockVideoPlayer(isBlocked);
+        if (isBlocked) {
+          localStorage.removeItem("watchTime");
+        }
       } else {
         setBlockVideoPlayer(false);
       }
 
       setWatchTime(data?.data?.minutes_watched);
-      localStorage.setItem("watchTime", data?.data?.minutes_watched);
+
+      if (!isBlocked) localStorage.setItem("watchTime", data?.data?.minutes_watched);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleStreamButtonClick = async (index, minutesWatched) => {
+  const handleStreamButtonClick = async (index = 0, minutesWatched) => {
     setCurrentStreamIndex(index);
     if (!session) {
       await handleGuestUserWatchTime(minutesWatched, index);
@@ -96,11 +104,8 @@ const SelectedLiveMatch = ({ match }) => {
     }
   };
 
-  // const popupTime = session ? streamSettings?.data?.loginPopupTime : streamSettings?.data?.guestPopupTime;
-  // const popupDuration = session ? streamSettings?.data?.loginPopupDuration : streamSettings?.data?.guestPopupDuration;
-
-  const popupTime = 10;
-  const popupDuration = 5;
+  const popupTime = session ? LOGGED_IN_POPUP_INTERVAL : GUEST_POPUP_INTERVAL;
+  const popupDuration = session ? LOGGED_IN_POPUP_DURATION : GUEST_POPUP_DURATION;
 
   useEffect(() => {
     const storedWatchTime = localStorage.getItem("watchTime");
@@ -108,11 +113,18 @@ const SelectedLiveMatch = ({ match }) => {
       setWatchTime(parseInt(storedWatchTime, 10));
     }
   }, []);
+  console.log(session);
+
+  // useEffect(() => {
+  //   if (session) {
+  //     setBlockVideoPlayer(true);
+  //   }
+  // }, [session]);
 
   useEffect(() => {
     if (!blockVideoPlayer && isVideoPlaying) {
       const showPopupInterval = setInterval(
-        async () => {
+        () => {
           setShowPopup(true);
           setSeconds(popupDuration);
           const closePopupTimer = setTimeout(() => {
@@ -125,13 +137,13 @@ const SelectedLiveMatch = ({ match }) => {
 
       return () => clearInterval(showPopupInterval);
     }
-  }, [blockVideoPlayer, popupTime, popupDuration, isVideoPlaying, session, ,]);
+  }, [blockVideoPlayer, popupTime, popupDuration, isVideoPlaying, session]);
 
   useEffect(() => {
     if (session) {
-      handleLoginUserWatchTime(watchTime);
+      handleLoginUserWatchTime(watchTime, currentStreamIndex);
     } else {
-      handleGuestUserWatchTime(watchTime);
+      handleGuestUserWatchTime(watchTime, currentStreamIndex);
     }
   }, [showPopup]);
 
@@ -159,8 +171,6 @@ const SelectedLiveMatch = ({ match }) => {
     if (seconds <= 0) clearInterval();
   }, [seconds]);
 
-  // if (isLoadingStreamSettings || sessionLoading) return <h2>Loading....</h2>;
-
   const handleBeforePlay = () => {
     JWPlayer.players.forEach((otherPlayer) => {
       if (otherPlayer !== JWPlayer.players[`jw-player-${currentStreamIndex}`]) {
@@ -173,7 +183,7 @@ const SelectedLiveMatch = ({ match }) => {
 
   return (
     <>
-      {isLive ? (
+      {!isLive ? (
         <>
           <div className='relative aspect-video bg-black w-full border border-gray-800 p-0'>
             <div onClick={handleFullScreen} className='absolute bottom-0 right-3 z-20 h-11 w-11 cursor-pointer'></div>
@@ -185,11 +195,7 @@ const SelectedLiveMatch = ({ match }) => {
                 onPlay={() => setIsVideoPlaying(true)}
                 onPause={() => setIsVideoPlaying(false)}
                 onBuffer={(buffering) => {
-                  if (
-                    buffering.reason === "loading" ||
-                    buffering.reason === "buffering" ||
-                    buffering.reason === "stalled"
-                  ) {
+                  if (["loading", "buffering", "stalled"].includes(buffering.reason)) {
                     setIsVideoPlaying(false);
                   }
                 }}
@@ -200,7 +206,7 @@ const SelectedLiveMatch = ({ match }) => {
                 controls={true}
               />
             ) : (
-              <img src='/images/stadium.jpg' alt='Soccer field' className='w-full aspect-video' />
+              <img src='/images/wallpaperflare.com_wallpaper.jpg' alt='Soccer field' className='w-full aspect-video' />
             )}
             {!isPaidUser && (
               <ShowPopUps
