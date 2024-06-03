@@ -3,7 +3,7 @@
 import AuthModal from "@/app/(frontend)/(blank-layout)/user/components/AuthModal";
 import Countdown from "@/app/(frontend)/components/Countdown";
 import FixtureCard from "@/app/(frontend)/components/FixtureCard";
-import VideoPlayer from "@/app/(frontend)/components/VideoPlayer";
+import SelectedLiveMatch from "@/app/(frontend)/components/SelectedLiveMatch";
 import { useGetFixtureDataQuery, useGetFixtureDatabyIdQuery } from "@/features/front-end/fixture/fixtureApi";
 
 import { RootState } from "@/features/store";
@@ -29,7 +29,7 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
   const { isLoading: fixtureLoading, data: fixtureDataById } = useGetFixtureDatabyIdQuery(fixtureId);
   const { isLoading, data: fixtureData } = useGetFixtureDataQuery(undefined);
 
-  const streamSources = fixtureDataById?.data?.streaming_sources;
+  const streamSources = fixtureDataById?.data;
   const liveMatchStatus = isWithin15MinutesBeforeMatch(fixtureDataById?.data?.starting_at_timestamp);
   console.log("liveMatchStatus", liveMatchStatus);
 
@@ -47,8 +47,9 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
       {fixtureDataById?.data?.status === "1" && (
         <div>
           <div>
-            {!liveMatchStatus ? (
-              <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
+            {liveMatchStatus ? (
+              // <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
+              <SelectedLiveMatch match={streamSources} />
             ) : (
               <div className='my-5 flex justify-center'>
                 <div

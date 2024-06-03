@@ -26,11 +26,11 @@ export const menuItems = [
     href: routes.admin.manageMatch.home,
     icon: <PiTelevisionFill />
   },
-  {
-    name: "Highlights",
-    href: routes.admin.highlights.home,
-    icon: <PiTelevisionFill />
-  },
+  // {
+  //   name: "Highlights",
+  //   href: routes.admin.highlights.home,
+  //   icon: <PiTelevisionFill />
+  // },
   {
     name: "Leagues",
     href: routes.admin.popularLeagues,
@@ -45,11 +45,6 @@ export const menuItems = [
     name: "News",
     href: routes.admin.news.home,
     icon: <IoNewspaperOutline />
-  },
-  {
-    name: "Highlights",
-    href: routes.admin.highlights.home,
-    icon: <PiTelevisionFill />
   },
   {
     name: "Manage Users",

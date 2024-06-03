@@ -105,7 +105,17 @@ export default function VideoPlayer({ streamSources, fixtureId }) {
       clearTimeout(popupTimerRef.current);
       clearInterval(watchTimeIntervalRef.current);
     };
-  }, [isVideoPlaying, session, settingInfoLoading]);
+  }, [
+    isVideoPlaying,
+    session,
+    settingInfoLoading,
+    GUEST_FREE_WATCH_LIMIT,
+    GUEST_POPUP_DURATION,
+    GUEST_POPUP_INTERVAL,
+    LOGGED_IN_FREE_WATCH_LIMIT,
+    LOGGED_IN_POPUP_DURATION,
+    LOGGED_IN_POPUP_INTERVAL
+  ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
