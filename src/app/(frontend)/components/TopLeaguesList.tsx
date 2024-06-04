@@ -47,17 +47,19 @@ export default function TopLeaguesList({ data }: { data: string }) {
             ))}
           </div>
         ) : (
-          <div className=''>
-            {teams?.data?.map((team: any) => (
-              <Link key={team?.teamId} href={`/teams/${team?.name}/${team?.teamId}`}>
-                <div className='select-none'>
-                  <div className='mb-3 flex items-center'>
-                    <img src={team?.image} alt={team?.name} className='h-9 w-9 rounded-full' />
-                    <p className='text-md font-semibold ms-3'>{team?.name}</p>
+          <div>
+            <div className=''>
+              {teams?.data?.map((team: any) => (
+                <Link key={team?.teamId} href={`/teams/${team?.name}/${team?.teamId}`}>
+                  <div className='select-none'>
+                    <div className='mb-3 flex items-center'>
+                      <img src={team?.image} alt={team?.name} className='h-9 w-9 rounded-full' />
+                      <p className='text-md font-semibold ms-3'>{team?.name}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
         )}
       </div>

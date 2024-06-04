@@ -113,13 +113,6 @@ const SelectedLiveMatch = ({ match }) => {
       setWatchTime(parseInt(storedWatchTime, 10));
     }
   }, []);
-  console.log(session);
-
-  // useEffect(() => {
-  //   if (session) {
-  //     setBlockVideoPlayer(true);
-  //   }
-  // }, [session]);
 
   useEffect(() => {
     if (!blockVideoPlayer && isVideoPlaying) {
@@ -183,7 +176,7 @@ const SelectedLiveMatch = ({ match }) => {
 
   return (
     <>
-      {!isLive ? (
+      {isLive ? (
         <>
           <div className='relative aspect-video bg-black w-full border border-gray-800 p-0'>
             <div onClick={handleFullScreen} className='absolute bottom-0 right-3 z-20 h-11 w-11 cursor-pointer'></div>

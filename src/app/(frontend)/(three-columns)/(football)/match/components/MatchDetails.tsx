@@ -1,7 +1,6 @@
 "use client";
 
 import AuthModal from "@/app/(frontend)/(blank-layout)/user/components/AuthModal";
-import Countdown from "@/app/(frontend)/components/Countdown";
 import FixtureCard from "@/app/(frontend)/components/FixtureCard";
 import SelectedLiveMatch from "@/app/(frontend)/components/SelectedLiveMatch";
 import { useGetFixtureDataQuery, useGetFixtureDatabyIdQuery } from "@/features/front-end/fixture/fixtureApi";
@@ -47,7 +46,8 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
       {fixtureDataById?.data?.status === "1" && (
         <div>
           <div>
-            {!liveMatchStatus ? (
+            <SelectedLiveMatch match={streamSources} />
+            {/* {!liveMatchStatus ? (
               // <VideoPlayer streamSources={streamSources} fixtureId={fixtureId} />
               <SelectedLiveMatch match={streamSources} />
             ) : (
@@ -73,7 +73,7 @@ export default function MatchDetails({ status, fixtureId, matchTabItem }: IFixtu
                   </h2>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
           {/* ) : (
             <>

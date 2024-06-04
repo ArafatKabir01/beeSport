@@ -1,5 +1,6 @@
 "use client";
 import FixtureCard from "@/app/(frontend)/components/FixtureCard";
+import NoDataFound from "@/app/shared/NoDataFound";
 import { useGetFixtureDataQuery } from "@/features/front-end/fixture/fixtureApi";
 import { useGetTopLeaguesQuery } from "@/features/front-end/league/leagueApi";
 
@@ -18,11 +19,15 @@ const UpcommingLeagueMatch = ({ leagueId }: { leagueId: any }) => {
         <h2 className='text-3xl font-bold'>{league?.name}</h2>
       </div>
       <div>
-        <div className='bg-white p-3 rounded-lg'>
-          <h2 className='font-bold text-xl'>Upcoming Matches</h2>
+        {leagueFixture.length > 0 ? (
+          <div className='bg-white p-3 rounded-lg'>
+            <h2 className='font-bold text-xl'>Upcoming Matches</h2>
 
-          {leagueFixture?.map((fixture: any) => <FixtureCard key={fixture?.id} fixture={fixture} />)}
-        </div>
+            {leagueFixture?.map((fixture: any) => <FixtureCard key={fixture?.id} fixture={fixture} />)}
+          </div>
+        ) : (
+          <NoDataFound />
+        )}
       </div>
     </div>
   );

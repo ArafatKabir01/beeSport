@@ -16,7 +16,7 @@ export default function StreamChangeButtons({
     ${
       currentStreamIndex === index
         ? `btn-error shadow-lg shadow-rose-300`
-        : `btn-outline ${stream?.is_premium == 1 ? "btn-error shadow-md shadow-rose-300" : "btn-neutral"}   `
+        : `btn-outline ${stream?.is_premium == 1 ? "btn-error shadow-md shadow-rose-300" : "btn-primary"}   `
     }`}
             onClick={() => handleStreamButtonClick(index, watchTime)}
           >
